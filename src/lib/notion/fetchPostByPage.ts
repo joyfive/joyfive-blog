@@ -7,8 +7,7 @@ const notionClient = new NotionAPI({
   authToken: process.env.NOTION_TOKEN,
 })
 
-export async function fetchPostByPath(page: string, category: string, path: string) {
-  console.log("패치프롭", page, category, path)
+export async function fetchPostByPage(page: string) {
   try {
     // 1. 카테고리와 패스가 동시에 일치하는 데이터 쿼리
     const response = await notion.databases.query({
@@ -16,32 +15,21 @@ export async function fetchPostByPath(page: string, category: string, path: stri
       filter: {
         and: [
           { property: "page", select: { equals: page } },
-          { property: "category", select: { equals: category } },
-          { property: "path", rich_text: { equals: path } },
-          { property: "path", rich_text: { is_not_empty: true } }, // 안전장치 추가
         ],
       },
     })
-    console.log("fetchPath", response)
-    if (response.results.length !== 1) {
-      if (response.results.length > 1) {
-        console.warn(
-          `[Validation Error] 중복된 경로 발견: category=${category}, path=${path}`
-        )
-      }
-      return null
-    }
+
     const notionPage = response.results[0] as unknown as NotionRawResponse
 
     // 2. 해당 페이지의 블록 데이터 가져오기
     const recordMap = await notionClient.getPage(notionPage.id)
-    console.log("recordMap", recordMap)
+
     return {
       recordMap,
       properties: notionPage.properties,
     }
   } catch (error) {
-    console.error("fetchPostByPath error:", error)
+    console.error("fetchPostByPage error:", error)
     return null
   }
 }

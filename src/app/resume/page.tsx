@@ -1,5 +1,5 @@
 // src/app/blog/[category]/[path]/page.tsx
-import { fetchPostByPath } from "@/lib/notion/fetchPostByPath";
+import { fetchPostByPage } from "@/lib/notion/fetchPostByPage";
 import { getTitle, getMultiSelect, getDate } from "@/lib/utils/post";
 import { notFound } from "next/navigation";
 import { NotionDetailRenderer } from "@/components/notion/NotionDetailRenderer"; // 방금 만든 것
@@ -9,9 +9,9 @@ interface Props {
   params: { category: string; path: string };
 }
 
-export default async function PostDetailPage({ params }: Props) {
+export default async function ResumePage({ params }: Props) {
   const { path, category } = params;
-  const postData = await fetchPostByPath("blog", category, path);
+  const postData = await fetchPostByPage('resume');
 
   if (!postData) return notFound();
 

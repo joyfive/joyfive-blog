@@ -15,10 +15,10 @@ export async function fetchRecentPosts(limit: number = 5): Promise<BlogPost[]> {
   const response = await notion.databases.query({
     database_id: process.env.NOTION_DATABASE_ID!,
     filter: {
-      property: "path",
-      rich_text: {
-        is_not_empty: true, // 1차 필터: path가 비어있지 않은 것 (작성중 제외)
-      },
+      and: [
+        { property: "page", select: { equals: "blog" } },
+        { property: "path", rich_text: { is_not_empty: true } }, // 안전장치 추가
+      ]
     },
     sorts: [
       {

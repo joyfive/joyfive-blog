@@ -6,12 +6,13 @@ import { NotionDetailRenderer } from "@/components/notion/NotionDetailRenderer";
 import Link from "next/link";
 
 interface Props {
-  params: { category: string; path: string };
+  params: { path: string };
 }
 
-export default async function PostDetailPage({ params }: Props) {
-  const { path, category } = params;
-  const postData = await fetchPostByPath("blog", category, path);
+export default async function ProjectDetailPage({ params }: Props) {
+  const { path } = params;
+  const postData = await fetchPostByPath("project", "", path);
+  console.log("postData", postData)
 
   if (!postData) return notFound();
 
@@ -22,7 +23,7 @@ export default async function PostDetailPage({ params }: Props) {
     <main className="max-w-4xl mx-auto py-12 px-4">
       <header className="mb-10 flex flex-col gap-2">
         <div className="text-sm text-gray-400 mb-2">
-          <Link href={`/blog/${category}`}>  {category} </Link>
+          <Link href={`/projects`}>  모든 프로젝트</Link>
 
         </div>
         <div className="flex items-center justify-between"><h1>{title}</h1>

@@ -11,6 +11,9 @@ importers:
       '@notionhq/client':
         specifier: 2.2.15
         version: 2.2.15
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
       katex:
         specifier: ^0.16.28
         version: 0.16.28
@@ -41,6 +44,9 @@ importers:
       react-syntax-highlighter:
         specifier: ^16.1.0
         version: 16.1.0(react@18.3.1)
+      tailwind-merge:
+        specifier: ^3.4.0
+        version: 3.4.0
     devDependencies:
       '@types/node':
         specifier: ^20.11.0
@@ -2009,6 +2015,9 @@ packages:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
 
+  tailwind-merge@3.4.0:
+    resolution: {integrity: sha512-uSaO4gnW+b3Y2aWoWfFpX62vn2sR3skfhbjsEnaBI81WD1wBLlHZe5sWf0AqjksNdYTbGBEd0UasQMT3SNV15g==}
+
   tailwindcss@3.4.19:
     resolution: {integrity: sha512-3ofp+LL8E+pK/JuPLPggVAIaEuhvIz4qNcf3nA1Xn2o/7fb7s/TYpHhwGDv1ZU3PkBluUVaF8PyCHcm48cKLWQ==}
     engines: {node: '>=14.0.0'}
@@ -2701,8 +2710,7 @@ snapshots:
 
   client-only@0.0.1: {}
 
-  clsx@2.1.1:
-    optional: true
+  clsx@2.1.1: {}
 
   color-convert@2.0.1:
     dependencies:
@@ -4331,6 +4339,8 @@ snapshots:
       has-flag: 4.0.0
 
   supports-preserve-symlinks-flag@1.0.0: {}
+
+  tailwind-merge@3.4.0: {}
 
   tailwindcss@3.4.19:
     dependencies:

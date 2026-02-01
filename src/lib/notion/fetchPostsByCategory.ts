@@ -11,12 +11,18 @@ import {
 } from "@/lib/utils/post"
 
 export async function fetchPostsByCategory(
-  categoryName: string
+  pageName: string, categoryName: string
 ): Promise<BlogPost[]> {
   const response = await notion.databases.query({
     database_id: process.env.NOTION_DATABASE_ID!,
     filter: {
       and: [
+        {
+          property: "page", // 노션 DB의 컬럼명
+          select: {
+            equals: pageName,
+          },
+        },
         {
           property: "category", // 노션 DB의 컬럼명
           select: {

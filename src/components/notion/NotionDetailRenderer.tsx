@@ -4,7 +4,6 @@ import { NotionRenderer } from "react-notion-x";
 import Link from "next/link";
 import Image from "next/image";
 import dynamic from 'next/dynamic'
-
 // Code 컴포넌트를 dynamic import로 불러오기 (성능 최적화)
 const Code = dynamic(() =>
   import('react-notion-x/build/third-party/code').then((m) => m.Code)
@@ -29,9 +28,10 @@ export const NotionDetailRenderer = ({ recordMap }: { recordMap: any }) => {
         Code,
         Equation,
         nextImage: Image,
-        nextLink: Link,
+        nextLink: Link
       }}
       darkMode={false}
+
     />
   );
 };
