@@ -1,6 +1,9 @@
-notion-h-title {
+.notion-h-title {
   font-family: var(--font-danjo);
   color: #4a5565;
+}
+.notion-hr {
+  border-color: #e5e7eb;
 }
 /* 페이지 전체 가로 스크롤 방지 */
 .notion-app,
@@ -34,15 +37,42 @@ notion-h-title {
   color: #6a7282 !important;
 }
 
-.notion-list {
+.notion-list,
+.notion-list .notion-list .notion-list .notion-list,
+.notion-list
+  .notion-list
+  .notion-list
+  .notion-list
+  .notion-list
+  .notion-list
+  .notion-list {
   list-style-type: disc;
 }
 
-.notion-list .notion-list {
+.notion-list .notion-list,
+.notion-list .notion-list .notion-list .notion-list .notion-list,
+.notion-list
+  .notion-list
+  .notion-list
+  .notion-list
+  .notion-list
+  .notion-list
+  .notion-list
+  .notion-list {
   list-style-type: circle;
 }
 
-.notion-list .notion-list .notion-list {
+.notion-list .notion-list .notion-list,
+.notion-list .notion-list .notion-list .notion-list .notion-list .notion-list,
+.notion-list
+  .notion-list
+  .notion-list
+  .notion-list
+  .notion-list
+  .notion-list
+  .notion-list
+  .notion-list
+  .notion-list {
   list-style-type: square;
 }
 /* DB(테이블)만 필요하면 스크롤 허용 */
@@ -64,15 +94,20 @@ notion-h-title {
   min-height: 64px;
 }
 
+.notion-simple-table {
+  margin: 16px 0 !important;
+}
 .notion-simple-table-header-cell {
   color: #364153;
   border: 1px solid #d1d5dc !important;
   background-color: #f3f4f6 !important;
+  font-weight: 500;
 }
 .notion-simple-table-header-row {
   color: #364153;
   border: 1px solid #d1d5dc !important;
   background-color: #f3f4f6 !important;
+  font-weight: 500;
 }
 
 .notion-simple-table-header-row td {
