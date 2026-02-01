@@ -9,14 +9,12 @@
   --font-pretendard: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui,
     Roboto, sans-serif;
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #57534d;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -38,7 +36,6 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: var(--font-danjo);
   font-weight: bold;
 }
 

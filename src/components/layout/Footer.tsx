@@ -10,8 +10,8 @@ export default function Footer({ className = "" }) {
             </p>
           </div>
           <div className="flex gap-6 text-sm text-stone-400">
-            <a href="https://github.com" target="_blank" className="hover:text-black">Github</a>
-            <a href="mailto:admin@example.com" className="hover:text-black">Contact</a>
+            <a href="https://github.com" target="_blank" className="hover:text-stone-700">Github</a>
+            <a href="mailto:admin@example.com" className="hover:text-stone-700">Contact</a>
           </div>
         </div>
       </div>

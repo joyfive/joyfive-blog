@@ -37,8 +37,8 @@ export default async function CategoryPage({ params }: Props) {
                 key={cat.id}
                 href={`/blog/${cat.name}`}
                 className={`px-4 py-2 rounded-lg text-sm transition-all ${cat.name === category
-                    ? "bg-black text-white font-bold" // 현재 카테고리 강조
-                    : "text-stone-500 hover:bg-stone-100"
+                  ? "bg-stone-700 text-white font-bold" // 현재 카테고리 강조
+                  : "text-stone-500 hover:bg-stone-100"
                   }`}
               >
                 {cat.name}

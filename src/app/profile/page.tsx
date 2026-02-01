@@ -4,9 +4,9 @@ import Image from "next/image";
 export default function Home() {
   return (
     <div className="flex items-center justify-center">
-      <main className="mx-auto w-auto flex h-auto flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
+      <main className="mx-auto w-auto flex h-auto flex-col items-center justify-between py-32 px-16 bg-white dark:bg-stone-700 sm:items-start">
         <RoughCard tapes={["lt"]}>
-          <h1 className="mb-8 text-5xl font-bold text-stone-900 dark:text-white sm:text-6xl leading-snug">
+          <h1 className="mb-8 text-5xl font-bold text-stone-700 dark:text-white sm:text-6xl leading-snug">
             오기쁨.
           </h1>
           <p className="text-stone-700 dark:text-stone-300 text-lg">

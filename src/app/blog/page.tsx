@@ -27,7 +27,7 @@ export default async function BlogPage() {
           <nav className="flex flex-wrap md:flex-col gap-1">
             <Link
               href="/blog"
-              className="px-4 py-2 rounded-lg bg-stone-100 text-black text-sm font-semibold transition-all"
+              className="px-4 py-2 rounded-lg bg-stone-100 text-stone-700 text-sm font-semibold transition-all"
             >
               All Posts
             </Link>
@@ -35,7 +35,7 @@ export default async function BlogPage() {
               <Link
                 key={category.id}
                 href={`/blog/${category.name}`}
-                className="px-4 py-2 rounded-lg text-stone-500 hover:bg-stone-50 hover:text-stone-900 text-sm transition-all"
+                className="px-4 py-2 rounded-lg text-stone-500 hover:bg-stone-50 hover:text-stone-700 text-sm transition-all"
               >
                 {category.name}
               </Link>
@@ -49,7 +49,7 @@ export default async function BlogPage() {
             <h2 className="text-2xl font-bold">Recent Posts</h2>
             <Link
               href="/blog/all"
-              className="text-sm text-stone-400 hover:text-black transition-colors"
+              className="text-sm text-stone-400 hover:text-stone-700 transition-colors"
             >
               전체보기 →
             </Link>
