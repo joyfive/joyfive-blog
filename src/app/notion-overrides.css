@@ -1,9 +1,9 @@
 .notion-h-title {
   font-family: var(--font-danjo);
-  color: #4a5565;
+  color: #57534e;
 }
 .notion-hr {
-  border-color: #e5e7eb;
+  border-color: #e7e5e4;
 }
 /* 페이지 전체 가로 스크롤 방지 */
 .notion-app,
@@ -25,7 +25,7 @@
   font-size: 16px;
   font-weight: 400;
   line-height: 1.5;
-  color: #4a5565;
+  color: #57534e;
 }
 
 .notion-quote,
@@ -34,7 +34,7 @@
   font-size: 16px !important;
   font-weight: 400;
   line-height: 1.5;
-  color: #6a7282 !important;
+  color: #78716c !important;
 }
 
 .notion-list,
@@ -87,9 +87,9 @@
 }
 .notion .notion-code {
   border-radius: 4px;
-  color: #334155;
-  border: 1px solid #e5e7eb;
-  background-color: #f9fafb;
+  color: #44403c;
+  border: 1px solid #e7e5e4;
+  background-color: #fafaf9;
   margin: 16 8px;
   min-height: 64px;
 }
@@ -98,29 +98,29 @@
   margin: 16px 0 !important;
 }
 .notion-simple-table-header-cell {
-  color: #364153;
-  border: 1px solid #d1d5dc !important;
-  background-color: #f3f4f6 !important;
+  color: #44403c;
+  border: 1px solid #d6d3d1 !important;
+  background-color: #f5f5f4 !important;
   font-weight: 500;
 }
 .notion-simple-table-header-row {
-  color: #364153;
-  border: 1px solid #d1d5dc !important;
-  background-color: #f3f4f6 !important;
+  color: #44403c;
+  border: 1px solid #d6d3d1 !important;
+  background-color: #f5f5f4 !important;
   font-weight: 500;
 }
 
 .notion-simple-table-header-row td {
   background: transparent;
   border: transparent;
-  color: #364153;
-  border: 1px solid #d1d5dc !important;
-  background-color: #f3f4f6 !important;
+  color: #44403c;
+  border: 1px solid #d6d3d1 !important;
+  background-color: #f5f5f4 !important;
 }
 
 .notion-simple-table-row td {
-  color: #4a5565;
-  border: 1px solid #d1d5dc !important;
+  color: #57534e;
+  border: 1px solid #d6d3d1 !important;
   background-color: parent;
 }
 
@@ -159,10 +159,10 @@
   color: #605448 !important; /*custom-brown*/
 }
 .notion-gray {
-  color: #6a7282 !important; /*custom-gray*/
+  color: #78716c !important; /*stone-500*/
 }
 .notion-default {
-  color: #364153 !important; /*custom-default*/
+  color: #44403c !important; /*stone-700*/
 }
 .notion-yellow_background,
 .notion-yellow_background_color {
@@ -206,15 +206,15 @@
 }
 .notion-gray_background,
 .notion-gray_background_co {
-  background-color: #f3f4f6 !important; /*custom-gray-background*/
+  background-color: #f5f5f4 !important; /*stone-100*/
   border-radius: 4px;
 }
 
 /* 1. 기본 인라인 코드 (Case 1 & Case 4의 베이스) */
 .notion-inline-code {
   font-family: var(--font-chosun) !important;
-  background-color: #f3f4f6 !important; /* 기본 연회색 배경 */
-  color: #6a7282 !important; /* 노션 기본 인라인 코드 색상 (원하시는 색으로 변경 가능) */
+  background-color: #f5f5f4 !important; /* stone-100 */
+  color: #78716c !important; /* stone-500 */
   padding: 0.3em 0.6em !important;
   border-radius: 4px !important;
   display: inline-block !important; /* 여백이 정확히 먹히도록 인라인 블록으로 설정 */

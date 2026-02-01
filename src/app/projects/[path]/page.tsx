@@ -22,17 +22,17 @@ export default async function ProjectDetailPage({ params }: Props) {
   return (
     <main className="max-w-4xl mx-auto py-12 px-4">
       <header className="mb-10 flex flex-col gap-2">
-        <div className="text-sm text-gray-400 mb-2">
+        <div className="text-sm text-stone-400 mb-2">
           <Link href={`/projects`}>  모든 프로젝트</Link>
 
         </div>
         <div className="flex items-center justify-between"><h1>{title}</h1>
-          <div className="text-sm text-gray-400 mb-2">
+          <div className="text-sm text-stone-400 mb-2">
             게시일: {new Date(updated_at).toLocaleDateString("ko-KR")}
           </div></div>
         <div className="flex items-center gap-2">
           {tags.map((tag) => (
-            <span key={tag} className="text-xs text-gray-500 bg-gray-100 rounded-sm px-2 py-1 border border-gray-200">
+            <span key={tag} className="text-xs text-stone-500 bg-stone-100 rounded-sm px-2 py-1 border border-stone-200">
               # {tag}
             </span>
           ))}</div>

@@ -16,14 +16,14 @@ export default function Header({ className = "" }: { className?: string }) {
     <header className={`sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md ${className}`}>
       <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
         {/* 로고 영역 */}
-        <Link href="/" className="text-xl tracking-tighter hover:text-blue-600 transition-colors font-danjo">
+        <Link href="/" className="text-xl tracking-tighter hover:text-stone-600 transition-colors font-danjo">
           Joyfive
         </Link>
 
         {/* 네비게이션 메뉴 */}
         <nav className="flex items-center gap-6">
           {HEADER_ITEMS.map((item) => {
-            return (<Link key={item.id} href={`/${item.id}`} className={cn("text-sm font-medium text-gray-600 hover:text-black", currentPath === item.id ? "underline" : "")}>
+            return (<Link key={item.id} href={`/${item.id}`} className={cn("text-sm font-medium text-stone-600 hover:text-black", currentPath === item.id ? "underline" : "")}>
               {item.name}
             </Link>)
           })}

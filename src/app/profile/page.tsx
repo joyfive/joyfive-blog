@@ -6,13 +6,13 @@ export default function Home() {
     <div className="flex items-center justify-center">
       <main className="mx-auto w-auto flex h-auto flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
         <RoughCard tapes={["lt"]}>
-          <h1 className="mb-8 text-5xl font-bold text-gray-900 dark:text-white sm:text-6xl leading-snug">
+          <h1 className="mb-8 text-5xl font-bold text-stone-900 dark:text-white sm:text-6xl leading-snug">
             오기쁨.
           </h1>
-          <p className="text-gray-700 dark:text-gray-300 text-lg">
+          <p className="text-stone-700 dark:text-stone-300 text-lg">
             Product Manager
           </p>
-          <p className="text-gray-700 dark:text-gray-300 text-lg">
+          <p className="text-stone-700 dark:text-stone-300 text-lg">
             때로는 개발도 하고, 가끔은 글도 씁니다.
           </p>
         </RoughCard>
