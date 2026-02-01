@@ -1,0 +1,62 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* 프리텐다드 폰트 패밀리를 CSS 변수로 등록 */
+  --font-pretendard: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui,
+    Roboto, sans-serif;
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-pretendard);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-danjo);
+  font-weight: bold;
+}
+
+h1 {
+  font-size: 2rem;
+}
+h2 {
+  font-size: 1.75rem;
+}
+h3 {
+  font-size: 1.5rem;
+}
+h4 {
+  font-size: 1.25rem;
+}
+h5 {
+  font-size: 1rem;
+}
+h6 {
+  font-size: 0.875rem;
+}

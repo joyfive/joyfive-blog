@@ -1,0 +1,238 @@
+notion-h-title {
+  font-family: var(--font-danjo);
+  color: #4a5565;
+}
+/* 페이지 전체 가로 스크롤 방지 */
+.notion-app,
+.notion-page {
+  overflow-x: hidden;
+  width: 100% !important;
+  padding: 0 !important;
+}
+
+.notion-asset-wrapper img {
+  border-radius: 8px;
+}
+
+.notion-text,
+.notion-callout-text,
+.notion-list,
+.notion-to-do-item {
+  font-family: var(--font-pretendard);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #4a5565;
+}
+
+.notion-quote,
+.notion-quote .notion-text {
+  font-family: var(--font-chosun) !important;
+  font-size: 16px !important;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #6a7282 !important;
+}
+
+.notion-list {
+  list-style-type: disc;
+}
+
+.notion-list .notion-list {
+  list-style-type: circle;
+}
+
+.notion-list .notion-list .notion-list {
+  list-style-type: square;
+}
+/* DB(테이블)만 필요하면 스크롤 허용 */
+.notion-collection {
+  overflow-x: auto;
+}
+
+/* DB 테이블만 가로 스크롤 허용 */
+.notion-collection,
+.notion-table-view {
+  overflow-x: auto;
+}
+.notion .notion-code {
+  border-radius: 4px;
+  color: #334155;
+  border: 1px solid #e5e7eb;
+  background-color: #f9fafb;
+  margin: 16 8px;
+  min-height: 64px;
+}
+
+.notion-simple-table-header-cell {
+  color: #364153;
+  border: 1px solid #d1d5dc !important;
+  background-color: #f3f4f6 !important;
+}
+.notion-simple-table-header-row {
+  color: #364153;
+  border: 1px solid #d1d5dc !important;
+  background-color: #f3f4f6 !important;
+}
+
+.notion-simple-table-header-row td {
+  background: transparent;
+  border: transparent;
+  color: #364153;
+  border: 1px solid #d1d5dc !important;
+  background-color: #f3f4f6 !important;
+}
+
+.notion-simple-table-row td {
+  color: #4a5565;
+  border: 1px solid #d1d5dc !important;
+  background-color: parent;
+}
+
+.notion-page {
+  width: 100% !important;
+}
+
+.notion-callout {
+  border-radius: 12px !important;
+  padding: 16px !important;
+}
+
+/*컬러 적용*/
+.notion-yellow {
+  color: #c08732 !important; /*custom-yellow*/
+}
+.notion-till {
+  color: #36b155 !important; /*custom-till*/
+}
+.notion-blue {
+  color: #3d73f4 !important; /*custom-blue*/
+}
+.notion-purple {
+  color: #a471e1 !important; /*custom-purple*/
+}
+.notion-red {
+  color: #c53d46 !important; /*custom-red*/
+}
+.notion-orange {
+  color: #ff6900 !important; /*custom-orange*/
+}
+.notion-pink {
+  color: #d46088 !important; /*custom-pink*/
+}
+.notion-brown {
+  color: #605448 !important; /*custom-brown*/
+}
+.notion-gray {
+  color: #6a7282 !important; /*custom-gray*/
+}
+.notion-default {
+  color: #364153 !important; /*custom-default*/
+}
+.notion-yellow_background,
+.notion-yellow_background_color {
+  background-color: #f3eace !important; /*custom-yellow-background*/
+  border-radius: 4px;
+}
+.notion-till_background,
+.notion-till_background_co {
+  background-color: #e0f8e5 !important; /*custom-till-background*/
+  border-radius: 4px;
+}
+.notion-blue_background,
+.notion-blue_background_co {
+  background-color: #dbe7fe !important; /*custom-blue-background*/
+  border-radius: 4px;
+}
+.notion-purple_background,
+.notion-purple_background_co {
+  background-color: #f1ecfb !important; /*custom-purple-background*/
+  border-radius: 4px;
+}
+.notion-red_background,
+.notion-red_background_co {
+  background-color: #fae6e7 !important; /*custom-red-background*/
+  border-radius: 4px;
+}
+.notion-orange_background,
+.notion-orange_background_co {
+  background-color: #ffedd4 !important; /*custom-orange-background*/
+  border-radius: 4px;
+}
+.notion-pink_background,
+.notion-pink_background_co {
+  background-color: #f9eaf1 !important; /*custom-pink-background*/
+  border-radius: 4px;
+}
+.notion-brown_background,
+.notion-brown_background_co {
+  background-color: #e5e3dc !important; /*custom-brown-background*/
+  border-radius: 4px;
+}
+.notion-gray_background,
+.notion-gray_background_co {
+  background-color: #f3f4f6 !important; /*custom-gray-background*/
+  border-radius: 4px;
+}
+
+/* 1. 기본 인라인 코드 (Case 1 & Case 4의 베이스) */
+.notion-inline-code {
+  font-family: var(--font-chosun) !important;
+  background-color: #f3f4f6 !important; /* 기본 연회색 배경 */
+  color: #6a7282 !important; /* 노션 기본 인라인 코드 색상 (원하시는 색으로 변경 가능) */
+  padding: 0.3em 0.6em !important;
+  border-radius: 4px !important;
+  display: inline-block !important; /* 여백이 정확히 먹히도록 인라인 블록으로 설정 */
+  vertical-align: middle; /* 텍스트 라인과 높이 맞추기 */
+  line-height: 1.2;
+}
+
+/* 2. 배경색이 적용된 경우 (Case 2 & Case 3) */
+/* 배경색 클래스 안의 인라인 코드는 기본 배경을 투명하게 만듭니다. */
+:is(
+    .notion-red_background,
+    .notion-pink_background,
+    .notion-orange_background,
+    .notion-yellow_background,
+    .notion-teal_background,
+    .notion-blue_background,
+    .notion-purple_background,
+    .notion-brown_background,
+    .notion-gray_background
+  ).notion-inline-code {
+  background-color: transparent !important;
+  /* 부모인 span(배경색 클래스)의 글자색을 그대로 따라가게 함 */
+  color: inherit !important;
+  padding: 0.3em 0.6em !important;
+  border-radius: 4px !important;
+}
+
+/* 3. 컬러만 적용된 경우 (Case 4) */
+/* 배경색 없이 글자색 클래스(notion-red 등)만 부모로 있을 때 */
+:is(
+    .notion-red,
+    .notion-pink,
+    .notion-orange,
+    .notion-yellow,
+    .notion-teal,
+    .notion-blue,
+    .notion-purple,
+    .notion-brown,
+    .notion-gray
+  )
+  .notion-inline-code {
+  /* 기본 인라인 배경(0.05 블랙)은 유지하고, 글자색만 부모 색상 상속 */
+  color: inherit !important;
+  padding: 0.3em 0.6em !important;
+  border-radius: 4px !important;
+}
+/* 1 & 2. 배경색이 있는 경우 (중첩 구조 해결) */
+/* span의 배경색을 자식인 code가 그대로 물려받게 합니다. 패딩은 기쁨 님이 정하신 0.5em 1em이 유지됩니다. */
+span[class*="_background"] .notion-inline-code {
+  background-color: inherit !important;
+  color: inherit !important;
+}
+
+notion-coleection-page-properties {
+  display: none !important;
+}
