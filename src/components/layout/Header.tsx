@@ -41,7 +41,7 @@ export default function Header({ className = "" }: { className?: string }) {
                     randomRotate={false}
                     width="w-16"
                     height="h-5"
-                    className="bottom-1 -left-1"
+                    className="bottom-1 !-left-1"
                   />
                 )}
                 {item.name}
