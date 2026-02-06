@@ -17,6 +17,8 @@ interface RoughTapeProps {
   className?: string;
   bg?: string;
   border?: string;
+  width?: string;
+  height?: string;
   randomRotate?: boolean;
 }
 
@@ -26,6 +28,8 @@ export default function RoughTape({
   className = "",
   bg = "bg-stone-700/10",
   border = "border-stone-700/50",
+  width = "w-28",
+  height = "h-10",
   randomRotate = true,
 }: RoughTapeProps) {
   const transformStyle = useMemo(() => {
@@ -44,7 +48,7 @@ export default function RoughTape({
 
   return (
     <div
-      className={`w-28 h-10 ${layoutClass} ${positionClass} ${bg} border ${border} filter-rough z-20 ${className}`}
+      className={`${width} ${height} ${layoutClass} ${positionClass} ${bg} border ${border} filter-rough z-20 ${className}`}
       style={transformStyle}
       aria-hidden="true"
     />

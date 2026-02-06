@@ -39,7 +39,9 @@ export default function Header({ className = "" }: { className?: string }) {
                     position="lb"
                     absolute
                     randomRotate={false}
-                    className="w-16 h-5 bottom-1 -left-1"
+                    width="w-16"
+                    height="h-5"
+                    className="bottom-1 -left-1"
                   />
                 )}
                 {item.name}
