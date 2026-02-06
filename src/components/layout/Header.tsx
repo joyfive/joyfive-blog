@@ -75,12 +75,12 @@ export default function Header({ className = "" }: { className?: string }) {
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
-                    className="fixed inset-0 z-[100] bg-white flex flex-col p-6"
+                    className="fixed inset-0 z-[100] bg-white flex flex-col px-4"
                   >
                     {/* 모달 상단 헤더 공간 */}
-                    <div className="flex justify-between items-center h-10 mb-16">
-                      <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-stone-400">
-                        Thinking & Making Archive
+                    <div className="flex justify-between items-center h-16 mb-16">
+                      <span className="text-stone-400 text-xl tracking-tighter hover:text-stone-600 transition-colors font-danjo">
+                        오늘의 기쁨
                       </span>
                       <Dialog.Close asChild>
                         <button className="p-2 border border-stone-200 filter-rough bg-white hover:bg-stone-50 transition-colors">
@@ -101,14 +101,15 @@ export default function Header({ className = "" }: { className?: string }) {
                             initial={{ opacity: 0, x: -10 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: idx * 0.05 }}
+                            className='px-8'
                           >
                             <Link
                               href={`/${item.id}`}
                               className="relative inline-block"
                             >
                               <span className={cn(
-                                "text-5xl font-serif italic tracking-tight transition-all",
-                                isActive ? "text-stone-900 underline decoration-stone-200 underline-offset-8" : "text-stone-300"
+                                "text-3xl font-danjo italic tracking-tight transition-all",
+                                isActive ? "text-stone-900 underline decoration-stone-200 underline-offset-8" : "text-stone-400"
                               )}>
                                 {item.name}
                               </span>
@@ -130,10 +131,9 @@ export default function Header({ className = "" }: { className?: string }) {
                     </nav>
 
                     {/* 하단 푸터 느낌 장식 */}
-                    <div className="mt-auto pb-8">
-                      <p className="text-[10px] font-mono text-stone-300 leading-loose">
-                        © 2024 Joyfive Workshop.<br />
-                        Built with Next.js & Notion.
+                    <div className="mt-auto pb-8 px-8">
+                      <p className="text-xs font-pretendard text-stone-300 leading-loose">
+                        © 2026. joyfive All rights reserved.<br />
                       </p>
                     </div>
                   </motion.div>
