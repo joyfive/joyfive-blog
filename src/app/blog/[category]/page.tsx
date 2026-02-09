@@ -12,7 +12,7 @@ export default async function CategoryPage({ params }: Props) {
 
   // 데이터 병렬 페칭
   const [posts, categories] = await Promise.all([
-    fetchPostsByCategory("blog", category),
+    fetchPostsByCategory("blog", category, false),
     fetchCategories(),
   ])
 

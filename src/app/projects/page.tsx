@@ -1,58 +1,44 @@
-// src/app/blog/[category]/page.tsx
-import Link from "next/link"
+// src/app/projects/page.tsx (또는 해당 경로의 page.tsx)
 import { fetchPostsByCategory } from "@/lib/notion/fetchPostsByCategory"
-import { fetchCategories } from "@/lib/notion/fetchCategories"
+import ProjectCard from "@/components/layout/ProjectCard" // 아까 만든 컴포넌트 임포트
 
 export default async function ProjectPage() {
-
-  // 데이터 병렬 페칭
-  const [posts] = await Promise.all([
-    fetchPostsByCategory("projects", "")
-  ])
+  // 1. 데이터 페칭 (needImage: true)
+  const posts = await fetchPostsByCategory("projects", "All", true)
 
   return (
-    <main className="max-w-5xl mx-auto py-12 px-4">
-      <div className="mb-12">
-        <h1 className="text-4xl font-bold mt-4 capitalize">Project</h1>
-        <p className="text-stone-500 mt-2">
-          {posts.length}개의 포스트가 있습니다.
+    <main className="max-w-5xl mx-auto py-20 px-6">
+      {/* 상단 헤더 영역 */}
+      <div className="mb-16">
+        <h1 className="text-5xl font-serif italic font-bold text-stone-900 tracking-tight">
+          Project.
+        </h1>
+        <p className="text-stone-400 mt-4 font-mono text-sm uppercase tracking-widest">
+          {posts.length} Selected Archives
         </p>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-12">
-
-
-        {/* 게시글 리스트 */}
-        <section className="flex-1">
-          <div className="grid gap-10">
-            {posts.length > 0 ? (
-              posts.map((post) => (
-                <article key={post.id} className="group">
-                  <Link href={`projects/${post.path}`}>
-                    <h3 className="text-2xl font-bold group-hover:text-stone-600 transition-colors">
-                      {post.title}
-                    </h3>
-                    <div className="flex gap-2 mt-2">
-                      {post.tags.map((tag) => (
-                        <span key={tag} className="text-xs text-stone-400">
-                          #{tag}
-                        </span>
-                      ))}
-                    </div>
-                    <time className="text-sm text-stone-400 mt-4 block">
-                      {new Date(post.updated_at).toLocaleDateString("ko-KR")}
-                    </time>
-                  </Link>
-                </article>
-              ))
-            ) : (
-              <p className="text-stone-500 py-20 text-center border-2 border-dashed rounded-xl">
-                이 카테고리에 작성된 글이 아직 없습니다.
-              </p>
-            )}
+      {/* 갤러리 그리드 레이아웃 */}
+      <section>
+        {posts.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-16">
+            {posts.map((post, index) => (
+              <ProjectCard
+                key={post.id}
+                project={post}
+                index={index}
+              />
+            ))}
           </div>
-        </section>
-      </div>
+        ) : (
+          <div className="py-32 text-center">
+            <p className="text-stone-400 font-serif italic text-xl border-t border-b py-10 border-stone-100">
+              The workshop is currently being organized. <br />
+              <span className="text-sm font-sans not-italic">프로젝트를 준비 중입니다.</span>
+            </p>
+          </div>
+        )}
+      </section>
     </main>
   )
 }

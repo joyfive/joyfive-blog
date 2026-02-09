@@ -13,6 +13,7 @@ export interface BlogPost {
   category: string
   tags: string[]
   updated_at: string
+  coverImage?: string
 }
 
 // 노션 속성별 상세 타입

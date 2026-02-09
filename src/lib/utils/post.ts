@@ -54,3 +54,29 @@ export function filterUniquePosts(posts: BlogPost[]): BlogPost[] {
     return isUnique
   })
 }
+
+// 커버 이미지 URL 추출 유틸리티
+export function getCoverImage(page: any): string | null {
+  if (!page.cover) return null;
+
+  if (page.cover.type === "external") {
+    return page.cover.external.url;
+  }
+  if (page.cover.type === "file") {
+    return page.cover.file.url;
+  }
+  return null;
+}
+// 본문 블록에서 순수 텍스트만 추출하여 요약본 만들기
+export function getExcerptFromBlocks(blocks: any[]): string {
+  return blocks
+    .filter(block =>
+      ['paragraph', 'heading_1', 'heading_2', 'heading_3', 'bulleted_list_item'].includes(block.type)
+    )
+    .map(block => {
+      const type = block.type;
+      return block[type].rich_text.map((t: any) => t.plain_text).join("");
+    })
+    .join(" ")
+    .slice(0, 150); // 갤러리 카드에 적절한 150자 내외
+}
