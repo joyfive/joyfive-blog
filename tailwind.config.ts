@@ -13,6 +13,7 @@ const config: Config = {
         danjo: ["var(--font-danjo)", "sans-serif"],
         chosun: ["var(--font-chosun)", "serif"],
         pretendard: ["var(--font-pretendard)", "sans-serif"],
+        ibmplex: ["var(--font-ibm)", "mono"]
       },
       // 커스텀 필터 유틸리티 추가
       filter: {

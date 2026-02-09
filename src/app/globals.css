@@ -4,10 +4,34 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "IbmPlexSans";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/IBMPlexSansKR-Text.woff")
+    format("woff");
+  font-weight: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IbmPlexSans";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/IBMPlexSansKR-Medium.woff")
+    format("woff");
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IbmPlexSans";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/IBMPlexSansKR-SemiBold.woff")
+    format("woff");
+  font-weight: 600;
+  font-display: swap;
+}
 :root {
   /* 프리텐다드 폰트 패밀리를 CSS 변수로 등록 */
   --font-pretendard: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui,
     Roboto, sans-serif;
+  --font-ibm: "IbmPlexSans";
   --background: #ffffff;
   --foreground: #57534d;
 }
@@ -38,22 +62,50 @@ h5,
 h6 {
   font-weight: bold;
 }
-
+/* --- Mobile Typography (Default) --- */
 h1 {
-  font-size: 2rem;
+  font-size: 1.5rem; /* 24px */
+  @apply font-bold tracking-tight leading-tight mb-6;
 }
 h2 {
-  font-size: 1.75rem;
+  font-size: 1.25rem; /* 20px */
+  @apply font-bold tracking-tight leading-snug mb-4;
 }
 h3 {
-  font-size: 1.5rem;
+  font-size: 1.125rem; /* 18px */
+  @apply font-semibold leading-normal mb-3;
 }
 h4 {
-  font-size: 1.25rem;
+  font-size: 0.875rem; /* 14px */
+  @apply font-semibold leading-normal mb-2;
 }
 h5 {
-  font-size: 1rem;
+  font-size: 0.8125rem; /* 13px */
+  @apply font-medium mb-1;
 }
 h6 {
-  font-size: 0.875rem;
+  font-size: 0.75rem; /* 12px */
+  @apply font-medium text-stone-500;
+}
+
+/* --- PC Typography (md: 768px 이상) --- */
+@media (min-width: 768px) {
+  h1 {
+    font-size: 2rem; /* 32px */
+  }
+  h2 {
+    font-size: 1.5rem; /* 24px */
+  }
+  h3 {
+    font-size: 1.25rem; /* 20px */
+  }
+  h4 {
+    font-size: 1rem; /* 16px */
+  }
+  h5 {
+    font-size: 0.875rem; /* 14px */
+  }
+  h6 {
+    font-size: 0.8125rem; /* 13px */
+  }
 }

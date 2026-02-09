@@ -25,8 +25,8 @@ export default async function PostDetailPage({ params }: Props) {
           <Link href={`/blog/${category}`}>  {category} </Link>
 
         </div>
-        <div className="flex items-center justify-between"><h1>{title}</h1>
-          <div className="text-sm text-stone-400 mb-2">
+        <div className="flex items-start justify-between flex-col md:flex-row"><h1>{title}</h1>
+          <div className="text-sm text-stone-400 md:mb-2">
             게시일: {new Date(updated_at).toLocaleDateString("ko-KR")}
           </div></div>
         <div className="flex items-center gap-2">
