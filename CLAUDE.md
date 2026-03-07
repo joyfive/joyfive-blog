@@ -115,6 +115,11 @@ Color palette (white background + stone monotone):
 
 The `RoughFilter` component injects an SVG `<filter id="rough-border">` used via the `.filter-rough` Tailwind utility class for a hand-drawn visual effect.
 
+## Workflow
+
+- 작업 단위별로 완료 시 자동으로 커밋한다.
+- 푸시는 사용자가 명시적으로 요청할 때만 실행한다.
+
 ## Design System Rules (작업 전 반드시 숙지)
 
 **Rough/테이프 요소 사용 기준**
@@ -127,39 +132,3 @@ The `RoughFilter` component injects an SVG `<filter id="rough-border">` used via
 - 기본: 텍스트
 - Active/선택: 마스킹테이프 덧씌운 느낌
 
-## Upcoming Tasks
-
-작업은 순서대로 진행한다 — 뒤 태스크는 앞 태스크의 정리가 완료된 상태를 전제로 한다.
-
-1. **Header** — Resume 네비 링크 제거 (URL 직접 접근은 유지, 네비에서만 숨김) ✅
-2. **Profile 페이지 삭제** → Home으로 대체 ✅
-3. **코드베이스 정리** — 미사용 함수/파일 제거, 리팩토링, 반복 패턴 컴포넌트화 ✅
-4. **홈 페이지** — 신규 Notion DB 연동, 위젯형 데이터 표시 (5번 이후 진행)
-5. **디자인 리뉴얼** — 아래 순서로 진행 (4번보다 먼저 진행)
-
-### 5-1. 전체 컬러/타이포 시스템 정의
-
-- 화이트 배경 + 스톤/모노톤 컬러 팔레트 확정
-- 폰트 시스템 정리
-
-### 5-2. Home 페이지 디자인
-
-- 마스킹테이프 + rough 카드 유지 (가장 잘 어울리는 영역)
-- 카드 간 여백/정렬 정리
-
-### 5-3. Blog 목록 페이지
-
-- 카테고리 사이드바: 헤더 active 패턴 동일하게 적용 (기본 텍스트 → 선택 시 테이프)
-- 태그 뱃지: 테이프 느낌으로 고정 디자인 교체
-- 카테고리 active 상태 디자인 정리
-
-### 5-4. Projects 페이지
-
-- 이미지 있는 카드: rough border 제거 → 클린한 border로 교체
-- 마스킹테이프 요소만 유지
-- 카드 hover 인터랙션 추가
-
-### 5-5. Blog/Project 상세 페이지
-
-- 본문 영역: rough 요소 없이 가독성 중심
-- 태그 뱃지: 5-3과 동일한 테이프 디자인 적용
