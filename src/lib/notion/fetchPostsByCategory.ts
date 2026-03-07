@@ -26,7 +26,7 @@ export async function fetchPostsByCategory(
         { property: "path", rich_text: { is_not_empty: true } },
       ],
     },
-    sorts: [{ property: "updated_at", direction: "descending" }],
+    sorts: [{ property: "published_at", direction: "descending" }],
   })
 
   const results = response.results as any[];
@@ -65,7 +65,7 @@ export async function fetchPostsByCategory(
         path: getRichText(page.properties.path),
         category: getSelect(page.properties.category),
         tags: getMultiSelect(page.properties.tags),
-        updated_at: getDate(page.properties.updated_at),
+        published_at: getDate(page.properties.published_at),
         coverImage: coverImage,
         excerpt: excerpt, // 프로젝트 카드에서 보여줄 동적 텍스트
       };

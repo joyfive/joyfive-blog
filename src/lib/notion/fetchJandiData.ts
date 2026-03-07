@@ -11,11 +11,8 @@ export interface JandiRecord {
   date: string; // YYYY-MM-DD
 }
 
-function toDateStr(date: Date): string {
-  const y = date.getFullYear();
-  const m = String(date.getMonth() + 1).padStart(2, "0");
-  const d = String(date.getDate()).padStart(2, "0");
-  return `${y}-${m}-${d}`;
+function toKSTDateStr(date: Date): string {
+  return date.toLocaleDateString("en-CA", { timeZone: "Asia/Seoul" });
 }
 
 export async function fetchJandiTypes(): Promise<JandiType[]> {
@@ -35,10 +32,7 @@ export async function fetchJandiTypes(): Promise<JandiType[]> {
 }
 
 export async function fetchJandiRecords(): Promise<JandiRecord[]> {
-  const today = new Date();
-  const start = new Date(today);
-  start.setDate(today.getDate() - 89);
-  const startStr = toDateStr(start);
+  const startStr = toKSTDateStr(new Date(Date.now() - 90 * 24 * 60 * 60 * 1000));
 
   const results: any[] = [];
   let cursor: string | undefined;
@@ -67,7 +61,7 @@ export async function fetchJandiRecords(): Promise<JandiRecord[]> {
         "";
       return {
         type: page.properties.type?.select?.name ?? "",
-        date: raw.slice(0, 10),
+        date: raw ? toKSTDateStr(new Date(raw)) : "",
       };
     })
     .filter((r) => r.type && r.date >= startStr);

@@ -12,7 +12,7 @@ export interface BlogPost {
   path: string
   category: string
   tags: string[]
-  updated_at: string
+  published_at: string
   coverImage?: string
 }
 
@@ -31,8 +31,8 @@ export type NotionMultiSelectProp = {
   multi_select: { name: string }[]
 }
 export type NotionDateProp = {
-  type: "last_edited_time"
-  last_edited_time: string
+  type: "date"
+  date: { start: string } | null
 }
 
 // 전체 응답 구조
@@ -43,6 +43,6 @@ export interface NotionRawResponse {
     path: NotionRichTextProp
     category: NotionSelectProp
     tags: NotionMultiSelectProp
-    updated_at: NotionDateProp
+    published_at: NotionDateProp
   }
 }

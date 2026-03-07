@@ -13,10 +13,7 @@ function calcGrid(n: number) {
 }
 
 function toDateStr(date: Date): string {
-  const y = date.getFullYear();
-  const m = String(date.getMonth() + 1).padStart(2, "0");
-  const d = String(date.getDate()).padStart(2, "0");
-  return `${y}-${m}-${d}`;
+  return date.toLocaleDateString("en-CA", { timeZone: "Asia/Seoul" });
 }
 
 export default async function JandiWidget() {
@@ -30,15 +27,13 @@ export default async function JandiWidget() {
   const { cols, rows } = calcGrid(types.length);
   const { width: blockW, height: blockH } = calcCellBlockSize(cols, rows);
 
-  // D-89 ~ D-0 (90일) 날짜 배열 생성
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  // D-90 ~ D-0 (91일, 13주) 날짜 배열 생성 — KST 기준
+  const todayStr = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Seoul" });
+  const [ty, tm, td] = todayStr.split("-").map(Number);
 
   const days: Date[] = [];
-  for (let i = 89; i >= 0; i--) {
-    const d = new Date(today);
-    d.setDate(today.getDate() - i);
-    days.push(d);
+  for (let i = 90; i >= 0; i--) {
+    days.push(new Date(ty, tm - 1, td - i));
   }
 
   // 첫날 기준 월요일 정렬 (앞에 null padding)
@@ -71,8 +66,6 @@ export default async function JandiWidget() {
     });
   });
 
-  const todayStr = toDateStr(today);
-
   return (
     <div className="relative mt-12">
       {/* Rough border */}
@@ -88,7 +81,7 @@ export default async function JandiWidget() {
         {/* 헤더: 타이틀 + 타입 배지 */}
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mb-5">
           <h2 className="text-xs font-bold text-stone-400 uppercase tracking-widest">
-            Activity · D-90
+            Activity · 13W
           </h2>
           <div className="flex flex-wrap gap-2">
             {types.map((type) => (

@@ -45,7 +45,7 @@ Each record has these properties:
 | `path` | rich_text | URL slug. Must be non-empty to be shown. |
 | `title` | title | Post title |
 | `tags` | multi_select | Tags |
-| `updated_at` | last_edited_time | Sort/display date |
+| `published_at` | date | Sort/display date |
 
 ### Data Flow
 

@@ -18,7 +18,7 @@ export default async function PostDetailPage({ params }: Props) {
     <main className="max-w-4xl mx-auto py-12 px-4">
       <PostHeader
         title={getTitle(postData.properties.title)}
-        updatedAt={getDate(postData.properties.updated_at)}
+        updatedAt={getDate(postData.properties.published_at)}
         tags={getMultiSelect(postData.properties.tags)}
         backHref={`/blog/${category}`}
         backLabel={category}

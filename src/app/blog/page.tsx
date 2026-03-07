@@ -48,7 +48,7 @@ export default async function BlogPage() {
                         {post.category}
                       </span>
                       <time className="text-xs text-stone-400">
-                        {new Date(post.updated_at).toLocaleDateString("ko-KR")}
+                        {new Date(post.published_at).toLocaleDateString("ko-KR")}
                       </time>
                     </div>
                     <h3 className="text-xl font-bold group-hover:text-stone-600 transition-colors">

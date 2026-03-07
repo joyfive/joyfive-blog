@@ -22,7 +22,7 @@ export async function fetchRecentPosts(limit: number = 5): Promise<BlogPost[]> {
     },
     sorts: [
       {
-        property: "updated_at",
+        property: "published_at",
         direction: "descending", // 최신 수정 순서
       },
     ],
@@ -39,7 +39,7 @@ export async function fetchRecentPosts(limit: number = 5): Promise<BlogPost[]> {
         path: getRichText(props.path),
         category: getSelect(props.category),
         tags: getMultiSelect(props.tags),
-        updated_at: getDate(props.updated_at),
+        published_at: getDate(props.published_at),
       }
     }
   )

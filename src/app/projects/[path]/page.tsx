@@ -18,7 +18,7 @@ export default async function ProjectDetailPage({ params }: Props) {
     <main className="max-w-4xl mx-auto py-12 px-4">
       <PostHeader
         title={getTitle(postData.properties.title)}
-        updatedAt={getDate(postData.properties.updated_at)}
+        updatedAt={getDate(postData.properties.published_at)}
         tags={getMultiSelect(postData.properties.tags)}
         backHref="/projects"
         backLabel="모든 프로젝트"

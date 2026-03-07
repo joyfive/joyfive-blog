@@ -25,8 +25,7 @@ export function getMultiSelect(prop: NotionMultiSelectProp): string[] {
 }
 
 export function getDate(prop: NotionDateProp): string {
-  // 노션 API에서 last_edited_time 타입은 해당 필드 안에 string 값이 바로 들어있습니다.
-  return prop?.last_edited_time ?? ""
+  return prop?.date?.start ?? ""
 }
 
 // src/lib/utils/post.ts 에 추가

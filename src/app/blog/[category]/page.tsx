@@ -46,7 +46,7 @@ export default async function CategoryPage({ params }: Props) {
                       ))}
                     </div>
                     <time className="text-sm text-stone-400 mt-3 block">
-                      {new Date(post.updated_at).toLocaleDateString("ko-KR")}
+                      {new Date(post.published_at).toLocaleDateString("ko-KR")}
                     </time>
                   </Link>
                 </article>
