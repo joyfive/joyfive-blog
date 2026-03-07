@@ -8,29 +8,29 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      // tailwind.config.ts
+      // Font roles:
+      // font-danjo     → 브랜딩/디스플레이 (헤더 로고, 모바일 메뉴)
+      // font-pretendard → 본문 기본 (body default)
+      // font-ibmplex   → 코드, 모노스페이스
       fontFamily: {
         danjo: ["var(--font-danjo)", "sans-serif"],
-        chosun: ["var(--font-chosun)", "serif"],
         pretendard: ["var(--font-pretendard)", "sans-serif"],
-        ibmplex: ["var(--font-ibm)", "mono"]
+        ibmplex: ["var(--font-ibm)", "monospace"],
       },
-      // 커스텀 필터 유틸리티 추가
+      // Color palette: white background + stone monotone
+      // stone-50  → 서브 배경 (카드 이면, hover)
+      // stone-100 → 태그 뱃지 배경, 구분선
+      // stone-200 → border
+      // stone-400 → 보조 텍스트 (날짜, 메타)
+      // stone-500 → 중간 텍스트
+      // stone-700 → 본문 텍스트
+      // stone-800 → 제목
       filter: {
         rough: "url(#rough-border)",
-      },
-      // 워크샵 컨셉의 그레이스케일 컬러 세팅
-      colors: {
-        workshop: {
-          paper: "#F4F4F2", // 미세한 종이 질감 배경
-          ink: "#1A1A1A", // 잉크 블랙
-          line: "#333333", // 와이어프레임용 선
-        },
       },
     },
   },
   plugins: [
-    // 필터를 유틸리티 클래스로 사용하기 위한 간단한 플러그인
     ({ addUtilities }: any) => {
       addUtilities({
         ".filter-rough": {

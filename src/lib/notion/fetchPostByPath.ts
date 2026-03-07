@@ -8,7 +8,6 @@ const notionClient = new NotionAPI({
 })
 
 export async function fetchPostByPath(page: string, category: string, path: string) {
-  console.log("패치프롭", page, category, path)
   try {
     // 1. 카테고리와 패스가 동시에 일치하는 데이터 쿼리
     const response = await notion.databases.query({
@@ -22,7 +21,6 @@ export async function fetchPostByPath(page: string, category: string, path: stri
         ],
       },
     })
-    console.log("fetchPath", response)
     if (response.results.length !== 1) {
       if (response.results.length > 1) {
         console.warn(
@@ -35,7 +33,6 @@ export async function fetchPostByPath(page: string, category: string, path: stri
 
     // 2. 해당 페이지의 블록 데이터 가져오기
     const recordMap = await notionClient.getPage(notionPage.id)
-    console.log("recordMap", recordMap)
     return {
       recordMap,
       properties: notionPage.properties,

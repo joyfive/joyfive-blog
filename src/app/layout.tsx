@@ -18,13 +18,6 @@ const danjo = localFont({
   src: '../fonts/Danjo-bold-Regular.otf',
   variable: '--font-danjo',
   display: 'swap',
-  preload: true, // 빌드 시 경로 에러 방지를 위해 false 권장
-})
-
-const chosun = localFont({
-  src: '../fonts/ChosunCentennial_otf.otf',
-  variable: '--font-chosun',
-  display: 'swap',
   preload: true,
 })
 
@@ -34,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="ko" className={`${danjo.variable} ${chosun.variable}`}>
+    <html lang="ko" className={danjo.variable}>
 
       <body className="min-h-screen flex flex-col">
         <RoughFilter />

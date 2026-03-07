@@ -12,7 +12,7 @@ import RoughTape from "@/components/layout/RoughTape";
 export default function Header({ className = "" }: { className?: string }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
-  const currentPath = pathname.split('/')[1] || 'home';
+  const currentPath = pathname.split('/')[1];
 
   // 페이지 이동 시 모달 닫기
   useEffect(() => {
@@ -31,11 +31,11 @@ export default function Header({ className = "" }: { className?: string }) {
         {/* 1. PC 네비게이션 (md 이상에서만 표시) */}
         <nav className="hidden md:flex items-center gap-6">
           {HEADER_ITEMS.map((item) => {
-            const isActive = currentPath === item.id;
+            const isActive = item.id === "" ? currentPath === "" : currentPath === item.id;
             return (
               <Link
-                key={item.id}
-                href={`/${item.id}`}
+                key={item.name}
+                href={item.id ? `/${item.id}` : "/"}
                 className={cn(
                   "relative inline-block py-1 text-sm font-medium text-stone-600 hover:text-stone-700 w-14 text-center",
                   isActive ? "text-stone-800 font-bold" : ""
@@ -94,17 +94,17 @@ export default function Header({ className = "" }: { className?: string }) {
                     {/* 모바일 세로형 메뉴 */}
                     <nav className="flex flex-col gap-8">
                       {HEADER_ITEMS.map((item, idx) => {
-                        const isActive = currentPath === item.id;
+                        const isActive = item.id === "" ? currentPath === "" : currentPath === item.id;
                         return (
                           <motion.div
-                            key={item.id}
+                            key={item.name}
                             initial={{ opacity: 0, x: -10 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: idx * 0.05 }}
                             className='px-8'
                           >
                             <Link
-                              href={`/${item.id}`}
+                              href={item.id ? `/${item.id}` : "/"}
                               className="relative inline-block"
                             >
                               <span className={cn(

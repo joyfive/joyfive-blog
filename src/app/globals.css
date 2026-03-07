@@ -28,29 +28,14 @@
   font-display: swap;
 }
 :root {
-  /* 프리텐다드 폰트 패밀리를 CSS 변수로 등록 */
   --font-pretendard: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui,
     Roboto, sans-serif;
   --font-ibm: "IbmPlexSans";
-  --background: #ffffff;
-  --foreground: #57534d;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: #ffffff;
+  color: #44403c; /* stone-700 */
   font-family: var(--font-pretendard);
 }
 
