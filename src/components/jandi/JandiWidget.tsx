@@ -65,11 +65,11 @@ export default async function JandiWidget() {
 
   // 타입별 활동일수 집계
   const activityCounts: Record<string, number> = {};
-  for (const typeSet of activationMap.values()) {
-    for (const typeName of typeSet) {
+  activationMap.forEach((typeSet) => {
+    typeSet.forEach((typeName) => {
       activityCounts[typeName] = (activityCounts[typeName] ?? 0) + 1;
-    }
-  }
+    });
+  });
 
   const todayStr = toDateStr(today);
 
