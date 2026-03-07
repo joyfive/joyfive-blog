@@ -1,4 +1,8 @@
-import RoughCard from "@/components/layout/RoughCard";
+import { Suspense } from "react"
+import RoughCard from "@/components/layout/RoughCard"
+import JandiWidget from "@/components/jandi/JandiWidget"
+
+export const revalidate = 3600
 
 export default function Home() {
   return (
@@ -44,6 +48,10 @@ export default function Home() {
           </div>
         </RoughCard>
       </section>
+
+      <Suspense fallback={null}>
+        <JandiWidget />
+      </Suspense>
     </main>
   );
 }
