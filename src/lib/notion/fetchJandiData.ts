@@ -46,10 +46,6 @@ export async function fetchJandiRecords(): Promise<JandiRecord[]> {
   do {
     const response = await notion.databases.query({
       database_id: process.env.NOTION_JANDI_DB_ID!,
-      filter: {
-        property: "created_at",
-        date: { on_or_after: startStr },
-      },
       sorts: [{ property: "created_at", direction: "ascending" }],
       page_size: 100,
       ...(cursor ? { start_cursor: cursor } : {}),
@@ -63,9 +59,16 @@ export async function fetchJandiRecords(): Promise<JandiRecord[]> {
   } while (cursor);
 
   return results
-    .map((page: any) => ({
-      type: page.properties.type?.select?.name ?? "",
-      date: page.properties.created_at?.date?.start?.slice(0, 10) ?? "",
-    }))
-    .filter((r) => r.type && r.date);
+    .map((page: any) => {
+      // created_time 타입과 date 타입 모두 대응
+      const raw =
+        page.properties.created_at?.created_time ??
+        page.properties.created_at?.date?.start ??
+        "";
+      return {
+        type: page.properties.type?.select?.name ?? "",
+        date: raw.slice(0, 10),
+      };
+    })
+    .filter((r) => r.type && r.date >= startStr);
 }
