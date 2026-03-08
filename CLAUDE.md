@@ -13,13 +13,15 @@ pnpm lint     # Run ESLint
 
 ## Environment Variables
 
-Three variables are required in `.env.local`:
+Variables required in `.env.local`:
 
 | Variable | Purpose |
 |---|---|
 | `NOTION_API_KEY` | Official Notion API key — used by `@notionhq/client` for database queries |
 | `NOTION_DATABASE_ID` | The Notion database that backs all content |
 | `NOTION_TOKEN` | Unofficial token — used by `notion-client` (react-notion-x) to fetch full page block data |
+| `NOTION_PROFILE_CMS_DB_ID` | profile-cms DB — home page widgets (intro/skills/book/now categories) |
+| `NOTION_JANDI_DB_ID` | jandi DB — activity tracker widget |
 
 ## Architecture
 
