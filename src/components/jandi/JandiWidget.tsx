@@ -94,10 +94,10 @@ export default async function JandiWidget() {
       <div className="p-6 relative z-10">
         {/* 헤더: 타이틀 + 타입 배지 */}
         <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 mb-5">
-          <h2 className="text-xs font-bold text-stone-400 uppercase tracking-widest">
+          <h2 className="text-xs font-bold text-stone-400 uppercase tracking-widest leading-none m-0">
             Activity · 13W
           </h2>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             {types.map((type) => (
               <TypeBadge
                 key={type.id}
