@@ -7,38 +7,20 @@ export default async function IntroWidget() {
 
   return (
     <RoughCard tapes={["lt"]}>
-      <div className="flex flex-col gap-8">
-        {items.map((item, idx) => (
-          <div key={item.id}>
+      <div className="flex flex-col gap-6">
+        {items.map((item) => (
+          <div key={item.id} className="flex flex-col gap-2">
             {item.title && (
-              <p
-                className={
-                  idx === 0
-                    ? "text-5xl font-bold text-stone-800 leading-snug mb-3 font-danjo"
-                    : "text-base font-bold text-stone-500 uppercase tracking-widest mb-2"
-                }
-              >
-                {item.title}
-              </p>
+              <p className="text-sm font-medium text-stone-400">{item.title}</p>
             )}
-            {item.content.length > 0 && (
-              <ul className="flex flex-col gap-1.5">
-                {item.content.map((line, i) => (
-                  <li key={i} className={idx === 0 ? "text-stone-700 text-lg" : "text-stone-600 text-sm"}>
-                    {line}
-                  </li>
-                ))}
-              </ul>
-            )}
-            {item.description.length > 0 && (
-              <ul className="flex flex-col gap-1 mt-2">
-                {item.description.map((line, i) => (
-                  <li key={i} className="text-stone-400 text-sm">
-                    {line}
-                  </li>
-                ))}
-              </ul>
-            )}
+            {item.content.map((line, i) => (
+              <h2 key={i} className="font-danjo text-stone-800">
+                {line}
+              </h2>
+            ))}
+            {item.description.map((line, i) => (
+              <p key={i} className="text-stone-400 text-sm">{line}</p>
+            ))}
           </div>
         ))}
       </div>

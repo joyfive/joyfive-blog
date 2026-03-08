@@ -1,40 +1,61 @@
+import Image from "next/image";
 import { fetchProfileItems } from "@/lib/notion/fetchProfileCms";
 import RoughCard from "@/components/layout/RoughCard";
+
+function DateRange({ start, end }: { start: string; end: string }) {
+  if (!start) return null;
+  const suffix = end ? end : "진행중";
+  return (
+    <p className="text-xs text-stone-400">
+      {start} ~ {suffix}
+    </p>
+  );
+}
 
 export default async function NowWidget() {
   const items = await fetchProfileItems("now");
   if (items.length === 0) return null;
 
   return (
-    <RoughCard tapes={["rb"]} className="h-full">
-      <div className="flex flex-col gap-5">
+    <RoughCard tapes={["rb"]}>
+      <div className="flex flex-col gap-8">
         {items.map((item) => (
-          <div key={item.id}>
-            <div className="flex items-baseline gap-2 flex-wrap">
+          <div
+            key={item.id}
+            className={
+              item.img
+                ? "flex flex-col md:flex-row items-center justify-center gap-6"
+                : "flex flex-col items-center justify-center"
+            }
+          >
+            {/* 텍스트 영역 */}
+            <div className="flex flex-col items-center text-center gap-1.5">
               {item.title && (
-                <p className="text-sm font-semibold text-stone-700">{item.title}</p>
+                <p className="text-sm font-medium text-stone-400">{item.title}</p>
               )}
-              {item.start_date && (
-                <p className="text-xs text-stone-400 shrink-0">{item.start_date}</p>
-              )}
+              {item.content.map((line, i) => (
+                <h2 key={i} className="font-danjo text-stone-800">
+                  {line}
+                </h2>
+              ))}
+              <DateRange start={item.start_date} end={item.end_date} />
+              {item.description.map((line, i) => (
+                <p key={i} className="text-stone-400 text-xs">{line}</p>
+              ))}
             </div>
-            {item.content.length > 0 && (
-              <ul className="flex flex-col gap-0.5 mt-1">
-                {item.content.map((line, i) => (
-                  <li key={i} className="text-xs text-stone-500">
-                    {line}
-                  </li>
-                ))}
-              </ul>
-            )}
-            {item.description.length > 0 && (
-              <ul className="flex flex-col gap-0.5 mt-1">
-                {item.description.map((line, i) => (
-                  <li key={i} className="text-xs text-stone-400">
-                    {line}
-                  </li>
-                ))}
-              </ul>
+
+            {/* 이미지 */}
+            {item.img && (
+              <div className="relative w-28 h-28 shrink-0">
+                <Image
+                  src={item.img}
+                  alt={item.content[0] || item.title}
+                  fill
+                  className="object-cover"
+                  sizes="112px"
+                  unoptimized
+                />
+              </div>
             )}
           </div>
         ))}

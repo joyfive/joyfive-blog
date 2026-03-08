@@ -7,31 +7,37 @@ export default async function SkillsWidget() {
 
   return (
     <RoughCard tapes={["rt"]}>
-      <div className="flex flex-wrap gap-x-10 gap-y-6">
+      <div className="flex flex-wrap gap-x-10 gap-y-5">
         {items.map((item) => (
-          <div key={item.id} className="min-w-32">
+          <div key={item.id} className="flex flex-col gap-2">
             {item.title && (
-              <p className="text-xs font-bold text-stone-400 uppercase tracking-widest mb-2">
-                {item.title}
-              </p>
+              <p className="text-sm font-medium text-stone-400">{item.title}</p>
             )}
-            {item.content.length > 0 && (
-              <ul className="flex flex-col gap-1">
-                {item.content.map((line, i) => (
-                  <li key={i} className="text-stone-700 text-sm">
-                    {line}
-                  </li>
+            <div className="flex flex-wrap gap-2">
+              {item.content
+                .flatMap((line) => line.split(",").map((s) => s.trim()).filter(Boolean))
+                .map((tag, i) => (
+                  <span
+                    key={i}
+                    className="rounded-full px-2 py-1 bg-stone-50 border border-stone-200 text-stone-600 text-xs"
+                  >
+                    {tag}
+                  </span>
                 ))}
-              </ul>
-            )}
+            </div>
             {item.description.length > 0 && (
-              <ul className="flex flex-col gap-1 mt-1">
-                {item.description.map((line, i) => (
-                  <li key={i} className="text-stone-400 text-xs">
-                    {line}
-                  </li>
-                ))}
-              </ul>
+              <div className="flex flex-wrap gap-2 mt-1">
+                {item.description
+                  .flatMap((line) => line.split(",").map((s) => s.trim()).filter(Boolean))
+                  .map((tag, i) => (
+                    <span
+                      key={i}
+                      className="rounded-full px-2 py-1 border border-stone-100 text-stone-400 text-xs"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+              </div>
             )}
           </div>
         ))}
