@@ -11,8 +11,8 @@ export interface JandiRecord {
   date: string; // YYYY-MM-DD
 }
 
-function toKSTDateStr(date: Date): string {
-  return date.toLocaleDateString("en-CA", { timeZone: "Asia/Seoul" });
+function extractDate(prop: any): string {
+  return prop?.type === "date" ? (prop.date?.start ?? "") : "";
 }
 
 export async function fetchJandiTypes(): Promise<JandiType[]> {
@@ -32,7 +32,8 @@ export async function fetchJandiTypes(): Promise<JandiType[]> {
 }
 
 export async function fetchJandiRecords(): Promise<JandiRecord[]> {
-  const startStr = toKSTDateStr(new Date(Date.now() - 90 * 24 * 60 * 60 * 1000));
+  const startStr = new Date(Date.now() - 91 * 24 * 60 * 60 * 1000)
+    .toLocaleDateString("en-CA", { timeZone: "Asia/Seoul" });
 
   const results: any[] = [];
   let cursor: string | undefined;
@@ -54,14 +55,10 @@ export async function fetchJandiRecords(): Promise<JandiRecord[]> {
 
   return results
     .map((page: any) => {
-      // created_time 타입과 date 타입 모두 대응
-      const raw =
-        page.properties.created_at?.created_time ??
-        page.properties.created_at?.date?.start ??
-        "";
+      const date = extractDate(page.properties.created_at);
       return {
         type: page.properties.type?.select?.name ?? "",
-        date: raw ? toKSTDateStr(new Date(raw)) : "",
+        date,
       };
     })
     .filter((r) => r.type && r.date >= startStr);
