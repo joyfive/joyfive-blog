@@ -6,7 +6,7 @@ export const revalidate = 3600
 
 export default function Home() {
   return (
-    <main className="max-w-2xl w-full mx-auto py-16 px-6">
+    <main className="max-w-5xl w-full mx-auto py-16 px-6">
       {/* Hero */}
       <RoughCard tapes={["lt"]}>
         <h1 className="mb-6 text-5xl font-bold text-stone-800 leading-snug">

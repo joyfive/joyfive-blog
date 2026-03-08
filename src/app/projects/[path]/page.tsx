@@ -15,7 +15,7 @@ export default async function ProjectDetailPage({ params }: Props) {
   if (!postData) return notFound();
 
   return (
-    <main className="max-w-4xl mx-auto py-12 px-4">
+    <main className="max-w-5xl mx-auto py-12 px-4">
       <PostHeader
         title={getTitle(postData.properties.title)}
         updatedAt={getDate(postData.properties.published_at)}

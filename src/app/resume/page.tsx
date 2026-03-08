@@ -8,7 +8,7 @@ export default async function ResumePage() {
   if (!postData) return notFound();
 
   return (
-    <main className="max-w-4xl mx-auto py-12 px-4">
+    <main className="max-w-5xl mx-auto py-12 px-4">
       <article className="notion-content">
         <NotionDetailRenderer recordMap={postData.recordMap} />
       </article>
