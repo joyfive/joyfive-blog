@@ -22,12 +22,12 @@ export default function Home() {
 
       {/* 3행: book 6 | now 4 */}
       <div className="flex flex-col md:flex-row gap-12">
-        <div className="md:flex-[6]">
+        <div className="md:flex-[5]">
           <Suspense fallback={null}>
             <BookWidget />
           </Suspense>
         </div>
-        <div className="md:flex-[4]">
+        <div className="md:flex-[5]">
           <Suspense fallback={null}>
             <NowWidget />
           </Suspense>

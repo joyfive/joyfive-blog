@@ -31,16 +31,20 @@ export default async function NowWidget() {
             {/* 텍스트 영역 */}
             <div className="flex flex-col items-center text-center gap-1.5">
               {item.title && (
-                <p className="text-sm font-medium text-stone-400">{item.title}</p>
+                <p className="text-sm font-medium text-stone-400">
+                  {item.title}
+                </p>
               )}
               {item.content.map((line, i) => (
-                <h2 key={i} className="font-danjo text-stone-800">
+                <h2 key={i} className="font-danjo">
                   {line}
                 </h2>
               ))}
               <DateRange start={item.start_date} end={item.end_date} />
               {item.description.map((line, i) => (
-                <p key={i} className="text-stone-400 text-xs">{line}</p>
+                <p key={i} className="text-stone-400 text-sm">
+                  {line}
+                </p>
               ))}
             </div>
 

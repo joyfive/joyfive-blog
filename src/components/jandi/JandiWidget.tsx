@@ -1,4 +1,7 @@
-import { fetchJandiTypes, fetchJandiRecords } from "@/lib/notion/fetchJandiData";
+import {
+  fetchJandiTypes,
+  fetchJandiRecords,
+} from "@/lib/notion/fetchJandiData";
 import RoughTape from "@/components/layout/RoughTape";
 import DayCell from "./DayCell";
 import TypeBadge from "./TypeBadge";
@@ -6,10 +9,23 @@ import TypeBadge from "./TypeBadge";
 const NUM_WEEKS = 13;
 const CELL_SIZE = 40; // Day cell 크기 (DayCell의 DAY_CELL과 동일)
 const CELL_GAP = 8;
-const DAY_LABEL_WIDTH = 12;
+const DAY_LABEL_WIDTH = 40;
 const DAY_LABEL_GAP = 6;
 
-const MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const MONTH_NAMES = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
 const DAY_LABELS = ["M", "T", "W", "T", "F", "S", "S"];
 
 function calcGrid(n: number) {
@@ -33,7 +49,9 @@ export default async function JandiWidget() {
   const { cols, rows } = calcGrid(types.length);
 
   // KST 기준 오늘
-  const todayStr = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Seoul" });
+  const todayStr = new Date().toLocaleDateString("en-CA", {
+    timeZone: "Asia/Seoul",
+  });
   const [ty, tm, td] = todayStr.split("-").map(Number);
   const todayDate = new Date(ty, tm - 1, td);
   const todayDOW = (todayDate.getDay() + 6) % 7; // 0=Mon, 6=Sun
@@ -94,7 +112,7 @@ export default async function JandiWidget() {
       <div className="p-6 relative z-10">
         {/* 헤더: 타이틀 + 타입 배지 */}
         <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 mb-5">
-          <h2 className="text-xs font-bold text-stone-400 uppercase tracking-widest leading-none m-0">
+          <h2 className="text-sm font-medium text-stone-400 leading-none m-0">
             Activity · 13W
           </h2>
           <div className="flex flex-wrap items-center gap-2">
@@ -118,13 +136,17 @@ export default async function JandiWidget() {
             >
               {weeks.map((_, col) => (
                 <div
+                  class={monthLabels[col] ? "border border-stone-200" : ""}
                   key={col}
                   style={{
                     width: CELL_SIZE,
                     marginLeft: col > 0 ? CELL_GAP : 0,
-                    fontSize: 10,
+                    fontSize: 12,
+                    textAlign: "center",
                     color: "#a8a29e",
                     whiteSpace: "nowrap",
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
                 >
                   {monthLabels[col] ?? ""}
@@ -141,10 +163,11 @@ export default async function JandiWidget() {
               >
                 {DAY_LABELS.map((label, i) => (
                   <div
+                    class="w-10 rounded-md bg-stone-50 border border-stone-200"
                     key={i}
                     style={{
                       height: CELL_SIZE,
-                      fontSize: 10,
+                      fontSize: 12,
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",

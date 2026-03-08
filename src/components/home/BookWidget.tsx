@@ -22,7 +22,8 @@ export default async function BookWidget() {
         {items.map((item) => {
           const raw = item.content[0] ?? "";
           const commaIdx = raw.indexOf(",");
-          const frontText = commaIdx >= 0 ? raw.slice(0, commaIdx).trim() : raw.trim();
+          const frontText =
+            commaIdx >= 0 ? raw.slice(0, commaIdx).trim() : raw.trim();
           const backText = commaIdx >= 0 ? raw.slice(commaIdx + 1).trim() : "";
 
           return (
@@ -37,15 +38,21 @@ export default async function BookWidget() {
               {/* 텍스트 영역 */}
               <div className="flex flex-col items-center text-center gap-1.5">
                 {item.title && (
-                  <p className="text-sm font-medium text-stone-400">{item.title}</p>
+                  <p className="text-sm font-medium text-stone-400">
+                    {item.title}
+                  </p>
                 )}
-                {frontText && <p className="text-sm text-stone-500">{frontText}</p>}
+                {frontText && (
+                  <p className="text-sm text-stone-500">{frontText}</p>
+                )}
                 {backText && (
-                  <h1 className="font-danjo text-stone-800">{backText}</h1>
+                  <h2 className="font-danjo text-stone-800">{backText}</h2>
                 )}
                 <DateRange start={item.start_date} end={item.end_date} />
                 {item.description.map((line, i) => (
-                  <p key={i} className="text-stone-400 text-xs">{line}</p>
+                  <p key={i} className="text-stone-400 text-sm">
+                    {line}
+                  </p>
                 ))}
               </div>
 
