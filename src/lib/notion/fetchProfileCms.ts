@@ -27,7 +27,7 @@ function formatStartDate(dateStr: string): string {
 
 export async function fetchProfileItems(category: string): Promise<ProfileItem[]> {
   const response = await notion.databases.query({
-    database_id: process.env.NOTION_PROFILE_CMS_DB_ID!,
+    database_id: process.env.NOTION_PROFILE_DB_ID!,
     filter: {
       property: "category",
       select: { equals: category },
