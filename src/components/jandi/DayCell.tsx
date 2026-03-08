@@ -51,7 +51,7 @@ export default function DayCell({
         return (
           <div
             key={i}
-            class="rounded-sm"
+            className="rounded-sm"
             style={{
               backgroundColor: filled ? getNotionColor(type.color) : "#f5f5f4",
             }}

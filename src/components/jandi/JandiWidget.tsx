@@ -136,7 +136,7 @@ export default async function JandiWidget() {
             >
               {weeks.map((_, col) => (
                 <div
-                  class={monthLabels[col] ? "border border-stone-200" : ""}
+                  className={monthLabels[col] ? "border border-stone-200" : ""}
                   key={col}
                   style={{
                     width: CELL_SIZE,
@@ -163,7 +163,7 @@ export default async function JandiWidget() {
               >
                 {DAY_LABELS.map((label, i) => (
                   <div
-                    class="w-10 rounded-md bg-stone-50 border border-stone-200"
+                    className="w-10 rounded-md bg-stone-50 border border-stone-200"
                     key={i}
                     style={{
                       height: CELL_SIZE,
