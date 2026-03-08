@@ -1,6 +1,5 @@
 
 export const HEADER_ITEMS = [
-  { id: "", name: "Profile" },
   { id: "projects", name: "Projects" },
   { id: "blog", name: "Blog" },
 ]

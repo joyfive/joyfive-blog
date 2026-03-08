@@ -31,11 +31,11 @@ export default function Header({ className = "" }: { className?: string }) {
         {/* 1. PC 네비게이션 (md 이상에서만 표시) */}
         <nav className="hidden md:flex items-center gap-6">
           {HEADER_ITEMS.map((item) => {
-            const isActive = item.id === "" ? currentPath === "" : currentPath === item.id;
+            const isActive = currentPath === item.id;
             return (
               <Link
                 key={item.name}
-                href={item.id ? `/${item.id}` : "/"}
+                href={`/${item.id}`}
                 className={cn(
                   "relative inline-block py-1 text-sm font-medium text-stone-600 hover:text-stone-700 w-14 text-center",
                   isActive ? "text-stone-800 font-bold" : ""
@@ -94,7 +94,7 @@ export default function Header({ className = "" }: { className?: string }) {
                     {/* 모바일 세로형 메뉴 */}
                     <nav className="flex flex-col gap-8">
                       {HEADER_ITEMS.map((item, idx) => {
-                        const isActive = item.id === "" ? currentPath === "" : currentPath === item.id;
+                        const isActive = currentPath === item.id;
                         return (
                           <motion.div
                             key={item.name}
@@ -104,7 +104,7 @@ export default function Header({ className = "" }: { className?: string }) {
                             className='px-8'
                           >
                             <Link
-                              href={item.id ? `/${item.id}` : "/"}
+                              href={`/${item.id}`}
                               className="relative inline-block"
                             >
                               <span className={cn(
