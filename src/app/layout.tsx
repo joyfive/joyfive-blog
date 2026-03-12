@@ -7,7 +7,7 @@ import Footer from "@/components/layout/Footer"
 import RoughFilter from "@/components/layout/RoughFilter";
 import Loading from "./loading";
 import localFont from 'next/font/local'
-import { GoogleAnalytics } from "@next/third-parties/google"
+import { GoogleTagManager } from "@next/third-parties/google"
 
 export const metadata: Metadata = {
   title: "오늘의 기쁨",
@@ -38,9 +38,7 @@ export default function RootLayout({
         </main>
         <Footer className="shrink-0" />
       </body>
-      {process.env.NEXT_PUBLIC_GA_ID && (
-        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
-      )}
+      <GoogleTagManager gtmId="GTM-ML8V3XQZ" />
 
     </html>
   )
