@@ -38,7 +38,9 @@ export default function RootLayout({
         </main>
         <Footer className="shrink-0" />
       </body>
-      <GoogleTagManager gtmId="GTM-ML8V3XQZ" />
+      {process.env.NEXT_PUBLIC_GTM_ID && (
+        <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID} />
+      )}
 
     </html>
   )
