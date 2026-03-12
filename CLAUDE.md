@@ -22,6 +22,7 @@ Variables required in `.env.local`:
 | `NOTION_TOKEN` | Unofficial token — used by `notion-client` (react-notion-x) to fetch full page block data |
 | `NOTION_PROFILE_DB_ID` | profile-cms DB — home page widgets (intro/skills/book/now categories) |
 | `NOTION_JANDI_DB_ID` | jandi DB — activity tracker widget |
+| `NEXT_PUBLIC_GTM_ID` | Google Tag Manager container ID (e.g. `GTM-XXXXXXX`) |
 
 ## Architecture
 
