@@ -55,21 +55,39 @@ Each record has these properties:
 ```
 Notion DB
   └─ src/lib/notion/          # Fetch layer (server-only)
-       ├─ fetchCategories.ts   # Reads category options from DB schema
-       ├─ fetchRecentPosts.ts  # Latest N blog posts
-       ├─ fetchPostsByCategory.ts  # Posts by page+category, optionally with cover images/excerpts
-       ├─ fetchPostByPath.ts   # Single post: queries by page+category+path, then fetches blocks
-       └─ fetchPostByPage.ts   # Single page (resume, profile) by page name
+       ├─ fetchCategories.ts        # Reads category options from DB schema
+       ├─ fetchRecentPosts.ts       # Latest N blog posts
+       ├─ fetchPostsByCategory.ts   # Posts by page+category, optionally with cover images/excerpts
+       ├─ fetchPostByPath.ts        # Single post: queries by page+category+path, then fetches blocks
+       │                             # Returns { id, recordMap, properties }
+       ├─ fetchPostByPage.ts        # Single page (resume, profile) by page name
+       ├─ fetchProfileCms.ts        # Home widgets: intro/skills/book/now (NOTION_PROFILE_DB_ID)
+       └─ fetchJandiData.ts         # Activity tracker (NOTION_JANDI_DB_ID)
 
-  └─ src/lib/utils/post.ts     # Property extractors: getTitle, getRichText, getSelect, etc.
-                                # filterUniquePosts: removes duplicate path entries from results
+  └─ src/lib/utils/
+       ├─ post.ts     # Property extractors: getTitle, getRichText, getSelect, etc.
+       │               # filterUniquePosts: removes duplicate path entries from results
+       └─ toc.ts      # extractHeadings(recordMap): parses header/sub_header/sub_sub_header blocks
+                       # in document order → HeadingItem[] for TableOfContents
 
-  └─ src/app/                  # Next.js pages (all Server Components except NotionDetailRenderer)
-       ├─ blog/[category]/[path]/page.tsx   # Post detail
+  └─ src/app/                  # Next.js pages (all Server Components except where noted)
+       ├─ blog/[category]/[path]/page.tsx   # Post detail (PostDetailHeader + TOC + RelatedPosts)
        ├─ projects/page.tsx                 # Gallery view (needImage: true)
        └─ resume|profile/page.tsx           # Single Notion pages
 
-  └─ src/components/notion/NotionDetailRenderer.tsx  # Client Component wrapping NotionRenderer
+  └─ src/components/
+       ├─ notion/NotionDetailRenderer.tsx   # "use client" — wraps react-notion-x NotionRenderer
+       ├─ blog/
+       │   ├─ PostDetailHeader.tsx          # "use client" — category tape + date + title + rough tags
+       │   ├─ TableOfContents.tsx           # "use client" — DesktopTOC (sticky sidebar) +
+       │   │                                #   MobileTOC (floating button + bottom sheet)
+       │   │                                #   IntersectionObserver for active heading tracking
+       │   └─ RelatedPosts.tsx              # "use client" — same-category latest 3, hover underline
+       └─ jandi/
+           ├─ JandiGrid.tsx                 # Shared grid renderer (no directive)
+           └─ MobileAdaptiveGrid.tsx        # "use client" — ResizeObserver로 컨테이너 폭 측정,
+                                            #   numWeeks = floor((width-38)/48), clamped [3,5]
+                                            #   → 35일·28일·21일 자동 전환
 ```
 
 ### Routing
@@ -86,9 +104,10 @@ Notion DB
 Post detail pages use `react-notion-x`. The flow is:
 
 1. Server Component fetches `recordMap` via the unofficial `NotionAPI` client
-2. Passes `recordMap` to `<NotionDetailRenderer>` (a `"use client"` component)
-3. `NotionRenderer` renders with `Code` (syntax highlighting) and `Equation` (KaTeX) loaded via `next/dynamic`
-4. Styles come from `react-notion-x/src/styles.css` and overrides in `src/app/notion-overrides.css`
+2. `extractHeadings(recordMap)` in `src/lib/utils/toc.ts` traverses the page block tree to extract heading items in document order (block types: `header`→h1, `sub_header`→h2, `sub_sub_header`→h3). HTML anchor ID = `blockId.replace(/-/g, '')` (react-notion-x format).
+3. Passes `recordMap` to `<NotionDetailRenderer>` (a `"use client"` component)
+4. `NotionRenderer` renders with `Code` (syntax highlighting) and `Equation` (KaTeX) loaded via `next/dynamic`
+5. Styles come from `react-notion-x/src/styles.css` and overrides in `src/app/notion-overrides.css`
 
 ### Data Integrity
 

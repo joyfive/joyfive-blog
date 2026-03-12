@@ -6,7 +6,7 @@
 
 개인 블로그를 Notion 기반 CMS + Next.js 웹페이지로 운영한다.
 
-정적 페이지(홈, 프로필, 이력, 프로젝트)와 블로그 콘텐츠를 명확히 분리한다.
+홈 콘텐츠를 위한 CMS DB와 포스팅 목적의 프로젝트/블로그 콘텐츠 DB를 분리하여 관리한다.
 
 콘텐츠 관리 복잡도를 최소화하면서, 향후 확장(태그, 검색)을 열어둔다.
 
@@ -17,9 +17,7 @@
 | _포함_                    | _제외 (v1)_                |
 | ------------------------- | -------------------------- |
 | 홈 페이지                 | 태그 기반 필터링 페이지    |
-| Profile 페이지            | 전문 검색 기능             |
-| Resume 페이지             | 로그인 / 댓글 / 좋아요     |
-| Projects 목록·상세 페이지 | 다중 DB 사용               |
+| Projects 목록·상세 페이지 | 전문 검색 기능                 |
 | 블로그 메인 페이지        | —                           |
 | 카테고리별 글 목록 페이지 | —                           |
 | 게시글 상세 페이지        | —                           |
@@ -32,8 +30,6 @@
 ```
 /
 ├─ Home (/)
-├─ Profile (/profile)           ← 정적
-├─ Resume (/resume)             ← Notion 단일 페이지 (page=resume)
 ├─ Projects
 │   ├─ 목록 (/projects)
 │   └─ 상세 (/projects/[path])
@@ -49,18 +45,18 @@
 
 #### 4.1 Home (/)
 
-- 정적 페이지
-- 역할:
-  - 블로그 진입점
-  - 사이트 성격 전달
-- 콘텐츠:
-  - 블로그 링크
-  - (추후 확장) 큐레이션 콘텐츠
+- Notion 기반 동적 페이지
+- 역할: 블로그 진입점, 사이트 성격 전달
+- 콘텐츠 (profile-cms DB, `NOTION_PROFILE_DB_ID`):
+  - IntroWidget (category=intro): 자기소개
+  - SkillsWidget (category=skills): 기술 스택 pill 목록
+  - BookWidget (category=book) + NowWidget (category=now): 2열 위젯
+  - JandiWidget: 활동 트래커 (`NOTION_JANDI_DB_ID`), 모바일 반응형 자동 컬럼
 
 #### 4.2 Blog 메인 (/blog)
 
 - 모든 게시글 리스트 (page=blog)
-- 정렬 기준: updated_at desc
+- 정렬 기준: published_at desc
 - 노출 조건: path 값이 존재, category 값이 존재
 - 기능: 전체 카테고리 링크 노출
 
@@ -77,44 +73,56 @@
 - 데이터 기준: Notion DB row 1개 (page=blog, category·path 일치)
 - URL 매칭 규칙: category === category, path === path
 - 렌더링: Notion content → react-notion-x 사용
+- 상단: 카테고리 뱃지(테이프 스타일) + 날짜 + 제목 + 태그(rough-notation box)
+- 목차(TOC): 데스크탑 sticky 사이드바 / 모바일 플로팅 버튼 + 바텀시트, IntersectionObserver 활성 추적
+- 하단: 같은 카테고리 최신 3개 글 (RelatedPosts)
 
-#### 4.5 Profile (/profile)
-
-- 정적 페이지
-- 역할: 소개·커리어·사이드 프로젝트 등 사이트 소유자 정보 전달
-- 콘텐츠: 소개, Career, Side-Project (코드에 하드코딩)
-
-#### 4.6 Resume (/resume)
-
-- Notion 단일 페이지 (page Select = resume) 기반
-- path·category 필수 아님. page=resume인 행 1건만 조회
-- 렌더링: react-notion-x 사용
-
-#### 4.7 Projects 목록 (/projects)
+#### 4.5 Projects 목록 (/projects)
 
 - page=projects 필터로 목록 노출
-- 정렬: updated_at desc
+- 정렬: published_at desc
 - 노출 조건: path 존재, 중복 없음
 
-#### 4.8 Project 상세 (/projects/[path])
+#### 4.6 Project 상세 (/projects/[path])
 
 - page=project + path 일치하는 Notion row 1건
 - 렌더링: react-notion-x 사용
 - (코드상 목록용 page 값은 "projects", 상세용은 "project" 사용)
 
 ### 5. Notion DB 스키마 정책
+- 프로필 페이지는 CMS DB와 로그성 트래커 JANDI DB 2종 사용.
 
-- 단일 DB 사용. 블로그·프로젝트·이력서는 **page** (Select) 값으로 구분한다.
+#### tracking-jandi(활동 기록 테이블)
+| 프로퍼티 | 타입 | 정책 |
+| ---------- | -------- |------------------------------------------ |
+| **title** | Title | 미사용, 데이터 생성용 |
+| **type** | Select | 활동 성격 구분 (읽기, 개발, 기록, 수영 등 동적 확장 가능) |
+| **created_at** | Date | 활동이 기록되거나 수행된 날짜 |
+
+#### profile-cms (프로필 콘텐츠 관리 테이블)
+| 프로퍼티 | 타입 | 정책 |
+| ----------|  -------- | ------------------------------------------ |
+| **title** | Title | 항목의 대제목 (예: Overview) |
+| **category** | Select | 콘텐츠의 분류 (intro, skills, book, now 4종 고정) |
+| **content** | Text | 핵심 문구 또는 요약된 내용 |
+| **description** | Text | 상세 설명 및 구체적인 본문 내용 |
+| **start_date** | Date | 해당 이력/활동의 시작일 |
+| **end_date** | Date | 해당 이력/활동의 종료일 |
+| **img** | Files & Media | 관련 이미지 또는 썸네일 파일 링크 (book,now 위젯만 대응) |
+
+---
+
+- 블로그/프로젝트 단일 DB 사용. 블로그·프로젝트는 **page** (Select) 값으로 구분한다.
 
 #### 필수 프로퍼티
 
 | 프로퍼티   | 타입     | 정책                                       |
 | ---------- | -------- | ------------------------------------------ |
-| page       | Select   | 블로그·프로젝트·이력서 구분 (blog, projects, project, resume) |
+| page       | Select   | 블로그·프로젝트·이력서 구분 (blog, project) |
 | title      | Title    | 콘텐츠 제목                                |
-| category   | Select   | 블로그용 단일 선택·필수. 프로젝트/이력서는 사용 방식만 상이 |
-| path       | Text URL | 블로그·프로젝트 상세 식별자. 이력서(resume)는 필수 아님 |
-| updated_at | Date     | 정렬 기준                                  |
+| category   | Select   | 블로그용 단일 선택·필수. 프로젝트는 사용 방식만 상이 |
+| path       | Text URL | 블로그·프로젝트 상세 식별자. |
+| published_at | Date     | 정렬 기준                                  |
 
 #### 선택 프로퍼티
 
@@ -151,10 +159,11 @@
 
 - Framework: Next.js (App Router)
 - Language: TypeScript
-- UI: React + Tailwind CSS
-- CMS: Notion API
+- UI: React + Tailwind CSS + rough-notation
+- CMS: Notion API (공식 `@notionhq/client` + 비공식 `notion-client`)
 - Rendering: react-notion-x
 - Package Manager: pnpm
+- Analytics: Google Tag Manager (`NEXT_PUBLIC_GTM_ID`)
 
 ### 10. 향후 확장 포인트 (명시적 비범위)
 
