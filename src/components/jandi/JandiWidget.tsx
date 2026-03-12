@@ -61,7 +61,7 @@ function JandiGrid({ numWeeks, types, activationMap, cols, rows, todayStr, ty, t
 
   return (
     <div className="flex justify-center overflow-x-auto">
-      <div>
+      <div className="pb-1 pr-1">
         {/* 월 라벨 */}
         <div className="flex mb-1" style={{ paddingLeft: DAY_LABEL_WIDTH + DAY_LABEL_GAP }}>
           {weeks.map((_, col) => (

@@ -10,8 +10,8 @@ export default async function ProjectPage() {
         <h1 className="text-5xl font-serif italic font-bold text-stone-900 tracking-tight">
           Project.
         </h1>
-        <p className="text-stone-400 mt-4 font-ibmplex text-sm uppercase tracking-widest">
-          {posts.length} Selected Archives
+        <p className="text-stone-400 mt-4 font-ibmplex text-sm">
+          직접 만들어본 것들과 경험한 것들을 기록합니다.
         </p>
       </div>
 
@@ -24,10 +24,7 @@ export default async function ProjectPage() {
           </div>
         ) : (
           <div className="py-32 text-center">
-            <p className="text-stone-400 italic text-xl border-t border-b py-10 border-stone-100">
-              The workshop is currently being organized.<br />
-              <span className="text-sm not-italic">프로젝트를 준비 중입니다.</span>
-            </p>
+            <p className="text-stone-400 py-10">곧 채워질 예정입니다.</p>
           </div>
         )}
       </section>
