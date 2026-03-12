@@ -34,6 +34,7 @@ export async function fetchPostByPath(page: string, category: string, path: stri
     // 2. 해당 페이지의 블록 데이터 가져오기
     const recordMap = await notionClient.getPage(notionPage.id)
     return {
+      id: notionPage.id,
       recordMap,
       properties: notionPage.properties,
     }
