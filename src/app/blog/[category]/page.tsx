@@ -2,6 +2,7 @@ import { fetchPostsByCategory } from "@/lib/notion/fetchPostsByCategory";
 import { fetchCategories } from "@/lib/notion/fetchCategories";
 import CategoryNav from "@/components/blog/CategoryNav";
 import BlogPostItem from "@/components/blog/BlogPostItem";
+import PageHeader from "@/components/layout/PageHeader";
 import type { Metadata } from "next";
 
 interface Props {
@@ -30,10 +31,7 @@ export default async function CategoryPage({ params }: Props) {
 
   return (
     <main className="max-w-5xl mx-auto py-12 px-4">
-      <section className="mb-16">
-        <h1 className="text-4xl font-bold mb-2 capitalize">{category}</h1>
-        <p className="text-stone-400 text-sm">{posts.length}개의 포스트</p>
-      </section>
+      <PageHeader title={category} description={`${posts.length}개의 포스트`} />
 
       <div className="flex flex-col md:flex-row gap-12">
         <aside className="w-full md:w-48 shrink-0">

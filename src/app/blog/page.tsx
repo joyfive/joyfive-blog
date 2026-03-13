@@ -2,6 +2,7 @@ import { fetchRecentPosts } from "@/lib/notion/fetchRecentPosts";
 import { fetchCategories } from "@/lib/notion/fetchCategories";
 import CategoryNav from "@/components/blog/CategoryNav";
 import BlogPostItem from "@/components/blog/BlogPostItem";
+import PageHeader from "@/components/layout/PageHeader";
 
 export default async function BlogPage() {
   const [recentPosts, categories] = await Promise.all([
@@ -11,10 +12,7 @@ export default async function BlogPage() {
 
   return (
     <main className="max-w-5xl mx-auto py-12 px-4">
-      <section className="mb-16">
-        <h1 className="text-4xl font-bold mb-2">Blog</h1>
-        <p className="text-stone-400 text-sm">읽고, 만들고, 생각한 것들을 남깁니다.</p>
-      </section>
+      <PageHeader title="Blog" description="읽고, 만들고, 생각한 것들을 남깁니다." />
 
       <div className="flex flex-col md:flex-row gap-12">
         <aside className="w-full md:w-48 shrink-0">
