@@ -2,9 +2,22 @@ import { fetchPostsByCategory } from "@/lib/notion/fetchPostsByCategory";
 import { fetchCategories } from "@/lib/notion/fetchCategories";
 import CategoryNav from "@/components/blog/CategoryNav";
 import BlogPostItem from "@/components/blog/BlogPostItem";
+import type { Metadata } from "next";
 
 interface Props {
   params: { category: string };
+}
+
+export function generateMetadata({ params }: Props): Metadata {
+  const { category } = params;
+  return {
+    title: `${category} | Blog | 오늘의 기쁨`,
+    description: `${category} 카테고리의 포스트 모음`,
+    openGraph: {
+      title: `${category} | Blog | 오늘의 기쁨`,
+      url: `https://joyfive-blog.vercel.app/blog/${category}`,
+    },
+  };
 }
 
 export default async function CategoryPage({ params }: Props) {
