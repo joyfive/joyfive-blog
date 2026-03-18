@@ -33,7 +33,7 @@ export default function ProjectCard({ project }: { project: any }) {
         {/* 텍스트 영역 */}
         <div className="flex flex-col flex-1 p-6">
           <div className="flex-1">
-            <h3 className="text-xl font-bold mb-2 group-hover:text-stone-600 transition-colors">
+            <h3 className="font-orbit text-xl font-bold mb-2 group-hover:text-stone-600 transition-colors">
               {project.title}
             </h3>
             {hasImage && project.excerpt && (

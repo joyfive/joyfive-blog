@@ -16,7 +16,7 @@ export default function PostHeader({ title, updatedAt, tags, backHref, backLabel
         <Link href={backHref} className="hover:text-stone-700 transition-colors">← {backLabel}</Link>
       </div>
       <div className="flex items-start justify-between flex-col md:flex-row">
-        <h1>{title}</h1>
+        <h1 className="font-orbit">{title}</h1>
         <div className="text-sm text-stone-400 md:mb-2 shrink-0 md:ml-8">
           {new Date(updatedAt).toLocaleDateString("ko-KR")}
         </div>

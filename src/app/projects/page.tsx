@@ -5,7 +5,7 @@ import ProjectCard from "@/components/layout/ProjectCard"
 import PageHeader from "@/components/layout/PageHeader"
 
 export default async function ProjectPage() {
-  const posts = await fetchPostsByCategory("projects", "All", true)
+  const posts = await fetchPostsByCategory("projects", "", true)
 
   return (
     <main className="max-w-5xl mx-auto py-12 px-4">

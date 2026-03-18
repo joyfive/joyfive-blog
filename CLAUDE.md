@@ -121,7 +121,7 @@ Font roles (defined in `tailwind.config.ts`, loaded in `globals.css` / `layout.t
 |---|---|---|
 | (body default) | Pretendard | 본문, UI 텍스트 |
 | `font-danjo` | Danjo Bold | 브랜딩/디스플레이 (헤더 로고, 모바일 메뉴) |
-| `font-ibmplex` | IBM Plex Sans KR | 코드, 모노스페이스 |
+| `font-orbit` | Orbit | 코드블럭, 인용문, 노션 헤딩 |
 
 Color palette (white background + stone monotone):
 

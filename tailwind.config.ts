@@ -9,13 +9,13 @@ const config: Config = {
   theme: {
     extend: {
       // Font roles:
-      // font-danjo     → 브랜딩/디스플레이 (헤더 로고, 모바일 메뉴)
+      // font-danjo      → 브랜딩/디스플레이 (헤더 로고, 모바일 메뉴)
       // font-pretendard → 본문 기본 (body default)
-      // font-ibmplex   → 코드, 모노스페이스
+      // font-orbit      → 코드블럭, 인용문, 노션 헤딩
       fontFamily: {
         danjo: ["var(--font-danjo)", "sans-serif"],
         pretendard: ["var(--font-pretendard)", "sans-serif"],
-        ibmplex: ["var(--font-ibm)", "monospace"],
+        orbit: ["var(--font-orbit)", "sans-serif"],
       },
       // Color palette: white background + stone monotone
       // stone-50  → 서브 배경 (카드 이면, hover)

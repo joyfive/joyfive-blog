@@ -52,7 +52,7 @@ export default function BlogPostItem({ post }: { post: BlogPost }) {
         </div>
 
         {/* 제목 */}
-        <h3 className="text-[20px] font-semibold text-stone-800 group-hover:text-stone-500 transition-colors leading-snug">
+        <h3 className="font-orbit text-[20px] font-semibold text-stone-800 group-hover:text-stone-500 transition-colors leading-snug">
           {post.title}
         </h3>
 

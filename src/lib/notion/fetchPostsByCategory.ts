@@ -22,7 +22,7 @@ export async function fetchPostsByCategory(
     filter: {
       and: [
         { property: "page", select: { equals: pageName } },
-        { property: "category", select: { equals: categoryName } },
+        ...(categoryName ? [{ property: "category", select: { equals: categoryName } }] : []),
         { property: "path", rich_text: { is_not_empty: true } },
       ],
     },
