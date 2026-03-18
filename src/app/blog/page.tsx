@@ -1,3 +1,5 @@
+export const revalidate = 60;
+
 import { fetchRecentPosts } from "@/lib/notion/fetchRecentPosts";
 import { fetchCategories } from "@/lib/notion/fetchCategories";
 import CategoryNav from "@/components/blog/CategoryNav";
