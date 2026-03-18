@@ -58,8 +58,11 @@ Notion DB
        ├─ fetchCategories.ts        # Reads category options from DB schema
        ├─ fetchRecentPosts.ts       # Latest N blog posts
        ├─ fetchPostsByCategory.ts   # Posts by page+category, optionally with cover images/excerpts
+       │                             # categoryName이 빈 문자열이면 category 필터 생략 (전체 조회)
        ├─ fetchPostByPath.ts        # Single post: queries by page+category+path, then fetches blocks
        │                             # Returns { id, recordMap, properties }
+       ├─ fetchPostMeta.ts          # generateMetadata 전용 경량 쿼리 (블록 fetch 없이 title/tags만)
+       ├─ fetchAllPostsForSitemap.ts # sitemap.ts 전용 — page 전체 포스트 목록 (블록 없음)
        ├─ fetchPostByPage.ts        # Single page (resume, profile) by page name
        ├─ fetchProfileCms.ts        # Home widgets: intro/skills/book/now (NOTION_PROFILE_DB_ID)
        └─ fetchJandiData.ts         # Activity tracker (NOTION_JANDI_DB_ID)
@@ -77,6 +80,8 @@ Notion DB
 
   └─ src/components/
        ├─ notion/NotionDetailRenderer.tsx   # "use client" — wraps react-notion-x NotionRenderer
+       ├─ layout/PageHeader.tsx             # 페이지 상단 타이틀/디스크립션 공통 컴포넌트
+       │                                    #   /blog, /blog/[category], /projects 에서 공유
        ├─ blog/
        │   ├─ PostDetailHeader.tsx          # "use client" — category tape + date + title + rough tags
        │   ├─ TableOfContents.tsx           # "use client" — DesktopTOC (sticky sidebar) +
@@ -113,6 +118,22 @@ Post detail pages use `react-notion-x`. The flow is:
 
 Posts with a non-unique `category+path` combination are silently excluded from listings (`filterUniquePosts` in `src/lib/utils/post.ts`). A `console.warn` is emitted for duplicates. `fetchPostByPath` also returns `null` if the query does not return exactly one result.
 
+### SEO & PWA
+
+- `src/app/sitemap.ts` → `/sitemap.xml` 자동 생성 (정적 페이지 + 블로그 전체 + 프로젝트 전체)
+- `src/app/robots.ts` → `/robots.txt` 생성
+- `public/manifest.json` → PWA 매니페스트 (standalone, icon-192/512)
+- `src/app/icon.svg`, `src/app/apple-icon.png` → Next.js App Router 파비콘 컨벤션
+- `generateMetadata` — 각 페이지(blog 글, blog 카테고리, project 글)에서 title/description/OG 개별 설정
+
+### ISR 캐싱 전략
+
+| 페이지 | revalidate | 이유 |
+|---|---|---|
+| `/` (홈) | 3600초 (1시간) | 위젯 데이터는 자주 바뀌지 않음 |
+| `/blog`, `/projects` | 60초 | 새 글 발행 후 최대 1분 내 반영 |
+| `/blog/[category]`, 상세 페이지 | Dynamic (ƒ) | 요청마다 실시간 렌더링 |
+
 ### Custom Fonts & Styling
 
 Font roles (defined in `tailwind.config.ts`, loaded in `globals.css` / `layout.tsx`):
@@ -136,6 +157,10 @@ Color palette (white background + stone monotone):
 | stone-800 | 제목 |
 
 The `RoughFilter` component injects an SVG `<filter id="rough-border">` used via the `.filter-rough` Tailwind utility class for a hand-drawn visual effect.
+
+**CSS 레이어 구조 (중요)**
+
+`globals.css`에서 `body`와 `h1-h6` 스타일은 반드시 `@layer base {}` 안에 위치해야 한다. unlayered 스타일은 Tailwind utilities layer보다 우선순위가 높아 `font-orbit` 등 유틸리티 클래스가 override되지 않는다.
 
 ## Workflow
 

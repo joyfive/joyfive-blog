@@ -169,6 +169,11 @@
 
 - 태그 페이지 /tag/[tag]
 - 카테고리 설명 메타 페이지
-- ISR 기반 캐싱 전략
 - 검색 / 정렬 옵션 등
-- (Profile, Resume, Projects는 v1 범위에 포함됨)
+- (Profile, Projects는 v1 범위에 포함됨)
+
+### 11. 완료된 인프라 항목
+
+- SEO: `generateMetadata` (글·카테고리별), `sitemap.xml`, `robots.txt`
+- PWA: `manifest.json`, 파비콘 (`icon.svg`, `apple-icon.png`)
+- ISR 캐싱: `/blog`, `/projects` revalidate 60초, 홈 3600초
