@@ -1,4 +1,4 @@
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 import { fetchPostsByCategory } from "@/lib/notion/fetchPostsByCategory"
 import ProjectCard from "@/components/layout/ProjectCard"
