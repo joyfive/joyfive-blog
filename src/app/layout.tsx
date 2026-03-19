@@ -13,6 +13,11 @@ export const metadata: Metadata = {
   title: "오늘의 기쁨",
   description: "기획자, 때로는 개발도 하고 가끔은 글도 씁니다.",
   manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    title: "오늘의 기쁨",
+    statusBarStyle: "default",
+  },
 }
 
 

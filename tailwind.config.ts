@@ -25,6 +25,15 @@ const config: Config = {
       // stone-500 → 중간 텍스트
       // stone-700 → 본문 텍스트
       // stone-800 → 제목
+      keyframes: {
+        blink: {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0" },
+        },
+      },
+      animation: {
+        blink: "blink 0.5s step-end infinite",
+      },
       filter: {
         rough: "url(#rough-border)",
       },
