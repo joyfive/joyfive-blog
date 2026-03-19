@@ -35,7 +35,7 @@ export default function JandiLogger({
     startTransition(async () => {
       const result = await createJandiRecord(typeName, logKey);
       if (result.ok) {
-        setCompleted((c) => new Set([...c, typeName]));
+        setCompleted((c) => new Set(Array.from(c).concat(typeName)));
         setTransient((t) => {
           const next = { ...t };
           delete next[typeName];
