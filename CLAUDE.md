@@ -23,6 +23,7 @@ Variables required in `.env.local`:
 | `NOTION_PROFILE_DB_ID` | profile-cms DB — home page widgets (intro/skills/book/now categories) |
 | `NOTION_JANDI_DB_ID` | jandi DB — activity tracker widget |
 | `NEXT_PUBLIC_GTM_ID` | Google Tag Manager container ID (e.g. `GTM-XXXXXXX`) |
+| `LOG_KEY` | 잔디 기록 어드민 페이지 접근 키 (`/admin/jandi?key=xxx`) |
 
 ## Architecture
 
@@ -66,6 +67,9 @@ Notion DB
        ├─ fetchPostByPage.ts        # Single page (resume, profile) by page name
        ├─ fetchProfileCms.ts        # Home widgets: intro/skills/book/now (NOTION_PROFILE_DB_ID)
        └─ fetchJandiData.ts         # Activity tracker (NOTION_JANDI_DB_ID)
+                                    # fetchJandiTypes: DB select 옵션 목록
+                                    # fetchJandiRecords: 최근 91일 기록
+                                    # fetchTodayJandiTypes: 오늘(KST) 기록된 type 목록 (admin용)
 
   └─ src/lib/utils/
        ├─ post.ts     # Property extractors: getTitle, getRichText, getSelect, etc.
@@ -76,7 +80,11 @@ Notion DB
   └─ src/app/                  # Next.js pages (all Server Components except where noted)
        ├─ blog/[category]/[path]/page.tsx   # Post detail (PostDetailHeader + TOC + RelatedPosts)
        ├─ projects/page.tsx                 # Gallery view (needImage: true)
-       └─ resume|profile/page.tsx           # Single Notion pages
+       ├─ resume|profile/page.tsx           # Single Notion pages
+       └─ admin/jandi/                      # 잔디 기록 어드민 (숨김 페이지)
+            ├─ page.tsx                     # 서버 컴포넌트 — LOG_KEY 인증, types+오늘완료 fetch
+            ├─ JandiLogger.tsx             # "use client" — 타입별 기록 버튼, 완료 상태 관리
+            └─ actions.ts                  # "use server" — Notion pages.create (오늘 KST 날짜)
 
   └─ src/components/
        ├─ notion/NotionDetailRenderer.tsx   # "use client" — wraps react-notion-x NotionRenderer
@@ -103,6 +111,7 @@ Notion DB
 - `/projects` — Gallery grid with cover images and excerpts
 - `/projects/[path]` — Project detail
 - `/profile`, `/resume` — Single Notion pages
+- `/admin/jandi?key=LOG_KEY` — 잔디 기록 전용 숨김 페이지 (robots: noindex, key 불일치 시 notFound)
 
 ### Rendering Notion Content
 
@@ -166,6 +175,7 @@ The `RoughFilter` component injects an SVG `<filter id="rough-border">` used via
 
 - 작업 단위별로 완료 시 자동으로 커밋한다.
 - 푸시는 사용자가 명시적으로 요청할 때만 실행한다.
+- **resume 페이지 (`/resume`, `fetchPostByPage.ts` 등)는 README.md에 절대 기재하지 않는다.** 이 페이지는 선택적으로 특정 대상에게만 공유하는 용도이므로 공개 문서에서 노출하지 않는다.
 
 ## Design System Rules (작업 전 반드시 숙지)
 

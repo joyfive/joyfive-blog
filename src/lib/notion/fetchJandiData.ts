@@ -31,6 +31,27 @@ export async function fetchJandiTypes(): Promise<JandiType[]> {
   return [];
 }
 
+export async function fetchTodayJandiTypes(): Promise<string[]> {
+  const todayKST = new Date().toLocaleDateString("en-CA", {
+    timeZone: "Asia/Seoul",
+  });
+
+  const response = await notion.databases.query({
+    database_id: process.env.NOTION_JANDI_DB_ID!,
+    filter: {
+      property: "created_at",
+      date: { equals: todayKST },
+    },
+  });
+
+  const types = new Set<string>();
+  for (const page of response.results) {
+    const name = (page as any).properties.type?.select?.name;
+    if (name) types.add(name);
+  }
+  return Array.from(types);
+}
+
 export async function fetchJandiRecords(): Promise<JandiRecord[]> {
   const startStr = new Date(Date.now() - 91 * 24 * 60 * 60 * 1000)
     .toLocaleDateString("en-CA", { timeZone: "Asia/Seoul" });

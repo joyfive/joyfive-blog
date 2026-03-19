@@ -22,6 +22,7 @@
 | 카테고리별 글 목록 페이지 | —                           |
 | 게시글 상세 페이지        | —                           |
 | Notion DB 단일 사용       | —                           |
+| 잔디 기록 어드민 페이지   | —                           |
 
 ---
 
@@ -33,10 +34,12 @@
 ├─ Projects
 │   ├─ 목록 (/projects)
 │   └─ 상세 (/projects/[path])
-└─ Blog
-    ├─ 메인 (/blog)
-    ├─ 카테고리별 목록 (/blog/[category])
-    └─ 게시글 상세 (/blog/[category]/[path])
+├─ Blog
+│   ├─ 메인 (/blog)
+│   ├─ 카테고리별 목록 (/blog/[category])
+│   └─ 게시글 상세 (/blog/[category]/[path])
+└─ Admin (숨김)
+    └─ 잔디 기록 (/admin/jandi?key=LOG_KEY)
 ```
 
 ---
@@ -88,6 +91,13 @@
 - page=project + path 일치하는 Notion row 1건
 - 렌더링: react-notion-x 사용
 - (코드상 목록용 page 값은 "projects", 상세용은 "project" 사용)
+
+#### 4.7 잔디 기록 어드민 (/admin/jandi)
+
+- 숨김 페이지 — robots: noindex, `?key=LOG_KEY` 파라미터 인증 필수 (불일치 시 404)
+- 서버에서 Notion jandi DB의 type 옵션 목록 + 오늘(KST) 완료 타입 목록 fetch
+- JandiLogger (Client Component): 타입별 버튼 탭 → Server Action으로 Notion 레코드 생성
+- 완료 상태는 즉시 UI 반영 (페이지 리로드 없이 Set 업데이트)
 
 ### 5. Notion DB 스키마 정책
 - 프로필 페이지는 CMS DB와 로그성 트래커 JANDI DB 2종 사용.
@@ -177,3 +187,5 @@
 - SEO: `generateMetadata` (글·카테고리별), `sitemap.xml`, `robots.txt`
 - PWA: `manifest.json`, 파비콘 (`icon.svg`, `apple-icon.png`)
 - ISR 캐싱: `/blog`, `/projects` revalidate 60초, 홈 3600초
+- 로딩 UI: `src/app/loading.tsx` — 글자별 순차 등장 애니메이션 + 커서 깜빡임
+- 잔디 기록 어드민: `/admin/jandi` — 타입 탭 기록, 오늘 완료 상태 즉시 반영
