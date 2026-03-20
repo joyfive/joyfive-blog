@@ -1,3 +1,5 @@
+export const revalidate = 300;
+
 import { fetchPostByPath } from "@/lib/notion/fetchPostByPath";
 import { fetchPostMeta } from "@/lib/notion/fetchPostMeta";
 import { getTitle, getMultiSelect, getDate } from "@/lib/utils/post";

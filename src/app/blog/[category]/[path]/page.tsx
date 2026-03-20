@@ -1,3 +1,5 @@
+export const revalidate = 300;
+
 import { fetchPostByPath } from "@/lib/notion/fetchPostByPath";
 import { fetchPostsByCategory } from "@/lib/notion/fetchPostsByCategory";
 import { fetchPostMeta } from "@/lib/notion/fetchPostMeta";
