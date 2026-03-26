@@ -11,7 +11,7 @@ import { GoogleTagManager } from "@next/third-parties/google"
 
 export const metadata: Metadata = {
   title: "오늘의 기쁨",
-  description: "기획자, 때로는 개발도 하고 가끔은 글도 씁니다.",
+  description: "구조를 사랑하는 기획자, 가끔은 개발도 하고 글도 씁니다.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "오늘의 기쁨",
-    description: "기획자, 때로는 개발도 하고 가끔은 글도 씁니다.",
+    description: "구조를 사랑하는 기획자, 가끔은 개발도 하고 글도 씁니다.",
     url: "https://joyfive-blog.vercel.app",
     siteName: "오늘의 기쁨",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "오늘의 기쁨",
-    description: "기획자, 때로는 개발도 하고 가끔은 글도 씁니다.",
+    description: "구조를 사랑하는 기획자, 가끔은 개발도 하고 글도 씁니다.",
     images: ["/og-image.png"],
   },
 }
