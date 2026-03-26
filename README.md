@@ -185,7 +185,8 @@
 ### 11. 완료된 인프라 항목
 
 - SEO: `generateMetadata` (글·카테고리별), `sitemap.xml`, `robots.txt`
-- PWA: `manifest.json`, 파비콘 (`icon.svg`, `apple-icon.png`)
-- ISR 캐싱: `/blog`, `/projects` revalidate 60초, 홈 3600초
-- 로딩 UI: `src/app/loading.tsx` — 글자별 순차 등장 애니메이션 + 커서 깜빡임
+- OG 이미지: `public/og-image.png` (1200×630) — 링크 공유 시 카카오/SNS 미리보기 썸네일
+- PWA: `manifest.json`, 파비콘 (`icon.svg`, `apple-icon.png`), `/admin` PWA 비활성화
+- ISR 캐싱: 홈·상세 300초, `/blog`·`/projects` force-dynamic
+- 로딩 UI: 모든 라우트 세그먼트에 `loading.tsx` 적용 — 글자별 순차 등장 애니메이션
 - 잔디 기록 어드민: `/admin/jandi` — 타입 탭 기록, 오늘 완료 상태 즉시 반영

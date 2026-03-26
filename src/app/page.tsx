@@ -5,7 +5,7 @@ import BookWidget from "@/components/home/BookWidget";
 import NowWidget from "@/components/home/NowWidget";
 import JandiWidget from "@/components/jandi/JandiWidget";
 
-export const revalidate = 3600;
+export const revalidate = 300;
 
 export default function Home() {
   return (

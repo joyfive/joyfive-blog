@@ -18,6 +18,21 @@ export const metadata: Metadata = {
     title: "오늘의 기쁨",
     statusBarStyle: "default",
   },
+  openGraph: {
+    title: "오늘의 기쁨",
+    description: "기획자, 때로는 개발도 하고 가끔은 글도 씁니다.",
+    url: "https://joyfive-blog.vercel.app",
+    siteName: "오늘의 기쁨",
+    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
+    locale: "ko_KR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "오늘의 기쁨",
+    description: "기획자, 때로는 개발도 하고 가끔은 글도 씁니다.",
+    images: ["/og-image.png"],
+  },
 }
 
 

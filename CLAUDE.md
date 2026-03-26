@@ -133,15 +133,23 @@ Posts with a non-unique `category+path` combination are silently excluded from l
 - `src/app/robots.ts` → `/robots.txt` 생성
 - `public/manifest.json` → PWA 매니페스트 (standalone, icon-192/512)
 - `src/app/icon.svg`, `src/app/apple-icon.png` → Next.js App Router 파비콘 컨벤션
+- `public/og-image.png` → OG/Twitter 카드 공통 썸네일 (1200×630px)
 - `generateMetadata` — 각 페이지(blog 글, blog 카테고리, project 글)에서 title/description/OG 개별 설정
+- `src/app/admin/layout.tsx` — `/admin` 하위 페이지는 PWA 비활성화 (manifest: null, appleWebApp.capable: false)
 
 ### ISR 캐싱 전략
 
 | 페이지 | revalidate | 이유 |
 |---|---|---|
-| `/` (홈) | 3600초 (1시간) | 위젯 데이터는 자주 바뀌지 않음 |
-| `/blog`, `/projects` | 60초 | 새 글 발행 후 최대 1분 내 반영 |
-| `/blog/[category]`, 상세 페이지 | Dynamic (ƒ) | 요청마다 실시간 렌더링 |
+| `/` (홈) | 300초 (5분) | 프로필 CMS·잔디 수정 반영 |
+| `/blog`, `/projects` | force-dynamic | 매 요청마다 최신 목록 fetch |
+| `/blog/[category]` | Dynamic (ƒ) | 요청마다 실시간 렌더링 |
+| `/blog/[category]/[path]`, `/projects/[path]` | 300초 (5분) | Notion 수정 후 최대 5분 내 반영 |
+
+### 로딩 UI
+
+- `src/app/loading.tsx` — 글자별 순차 등장 애니메이션. 루트 레벨 (`/`)에만 자동 적용.
+- 각 라우트 세그먼트에 `loading.tsx`를 두어 공통 적용: `blog/`, `blog/[category]/`, `blog/[category]/[path]/`, `projects/`, `projects/[path]/` 모두 `export { default } from "@/app/loading"` 재사용.
 
 ### Custom Fonts & Styling
 
