@@ -12,7 +12,7 @@ import { GoogleTagManager } from "@next/third-parties/google"
 export const metadata: Metadata = {
   title: "오늘의 기쁨",
   description: "구조를 사랑하는 기획자, 가끔은 개발도 하고 글도 씁니다.",
-  manifest: "/manifest.json",
+  manifest: "/manifest.json?v=2",
   appleWebApp: {
     capable: true,
     title: "오늘의 기쁨",
