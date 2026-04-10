@@ -46,7 +46,7 @@ export default async function BookWidget() {
                   <p className="text-sm text-stone-500">{frontText}</p>
                 )}
                 {backText && (
-                  <h2 className="font-danjo text-stone-800">{backText}</h2>
+                  <h2 className="font-danjo text-stone-800"><span className="font-orbit">『</span>{backText}<span className="font-orbit">』</span></h2>
                 )}
                 <DateRange start={item.start_date} end={item.end_date} />
                 {item.description.map((line, i) => (
