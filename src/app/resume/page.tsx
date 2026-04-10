@@ -2,6 +2,8 @@ import { fetchPostByPage } from "@/lib/notion/fetchPostByPage";
 import { notFound } from "next/navigation";
 import { NotionDetailRenderer } from "@/components/notion/NotionDetailRenderer";
 
+export const dynamic = "force-dynamic";
+
 export default async function ResumePage() {
   const postData = await fetchPostByPage('resume');
 
