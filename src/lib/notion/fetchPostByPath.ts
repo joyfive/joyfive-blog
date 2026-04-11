@@ -36,17 +36,6 @@ export async function fetchPostByPath(page: string, category: string, path: stri
     const raw = await notionClient.getPage(notionPage.id)
     const recordMap = sanitizeRecordMap(raw)
 
-    // --- DEBUG: recordMap 진단 로그 ---
-    const blockKeys = Object.keys(recordMap?.block ?? {})
-    const rootId = blockKeys[0]
-    const rootEntry = recordMap?.block?.[rootId]
-    console.log('[DEBUG] recordMap 블록 수:', blockKeys.length)
-    console.log('[DEBUG] 루트 블록 ID:', rootId)
-    console.log('[DEBUG] 루트 value 존재:', !!rootEntry?.value)
-    console.log('[DEBUG] 루트 content 길이:', rootEntry?.value?.content?.length ?? 'N/A')
-    console.log('[DEBUG] value가 null인 블록 수:', blockKeys.filter(k => !recordMap.block[k]?.value).length)
-    // --- END DEBUG ---
-
     return {
       id: notionPage.id,
       recordMap,

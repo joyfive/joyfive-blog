@@ -15,6 +15,23 @@ export function sanitizeRecordMap(recordMap: any): any {
 
   const blockMap: Record<string, any> = recordMap.block;
 
+  // 0차: 이중 중첩 구조 정규화
+  // notion-client가 collection record 페이지 블록을
+  // { value: { value: actualBlock, role } } 형태로 반환하는 경우 언래핑
+  for (const blockId of Object.keys(blockMap)) {
+    const entry = blockMap[blockId];
+    if (
+      entry?.value !== null &&
+      typeof entry?.value === "object" &&
+      "value" in entry.value &&
+      "role" in entry.value &&
+      typeof entry.value.value === "object"
+    ) {
+      entry.role = entry.value.role;
+      entry.value = entry.value.value;
+    }
+  }
+
   // 1차: value.id 없는 블록에 키를 채워줌
   for (const blockId of Object.keys(blockMap)) {
     const entry = blockMap[blockId];
