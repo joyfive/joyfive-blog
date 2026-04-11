@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import MermaidChart from "./MermaidChart";
+import { NotionErrorBoundary } from "./NotionErrorBoundary";
 
 const Code = dynamic(() =>
   import("react-notion-x/build/third-party/code").then((m) => m.Code)
@@ -27,16 +28,18 @@ function CodeBlock(props: any) {
 
 export const NotionDetailRenderer = ({ recordMap }: { recordMap: any }) => {
   return (
-    <NotionRenderer
-      recordMap={recordMap}
-      fullPage={false}
-      components={{
-        Code: CodeBlock,
-        Equation,
-        nextImage: Image,
-        nextLink: Link,
-      }}
-      darkMode={false}
-    />
+    <NotionErrorBoundary>
+      <NotionRenderer
+        recordMap={recordMap}
+        fullPage={false}
+        components={{
+          Code: CodeBlock,
+          Equation,
+          nextImage: Image,
+          nextLink: Link,
+        }}
+        darkMode={false}
+      />
+    </NotionErrorBoundary>
   );
 };

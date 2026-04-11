@@ -2,6 +2,7 @@
 import { notion } from "./client"
 import { NotionAPI } from "notion-client"
 import { NotionRawResponse } from "@/types/blog"
+import { sanitizeRecordMap } from "./sanitizeRecordMap"
 
 const notionClient = new NotionAPI({
   authToken: process.env.NOTION_TOKEN,
@@ -32,7 +33,8 @@ export async function fetchPostByPath(page: string, category: string, path: stri
     const notionPage = response.results[0] as unknown as NotionRawResponse
 
     // 2. 해당 페이지의 블록 데이터 가져오기
-    const recordMap = await notionClient.getPage(notionPage.id)
+    const raw = await notionClient.getPage(notionPage.id)
+    const recordMap = sanitizeRecordMap(raw)
     return {
       id: notionPage.id,
       recordMap,
