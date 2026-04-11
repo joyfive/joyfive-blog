@@ -13,7 +13,6 @@
 export function sanitizeRecordMap(recordMap: any): any {
   if (!recordMap?.block) return recordMap;
 
-  // 유효한 블록 ID 집합 (value가 있고 id가 있거나 복구 가능한 것)
   const blockMap: Record<string, any> = recordMap.block;
 
   // 1차: value.id 없는 블록에 키를 채워줌
