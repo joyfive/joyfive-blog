@@ -14,6 +14,9 @@ export const metadata: Metadata = {
   description: "구조를 사랑하는 기획자, 가끔은 개발도 하고 글도 씁니다.",
   verification: {
     google: "iZUNqZjH4on3vNMcAPfy3MH9Bqb20eZjnY8ag7ZC2Wo",
+    other: {
+      "naver-site-verification": "265ff0dcd487d5dcb04aca15864ee101969425d4",
+    },
   },
   manifest: "/manifest.json?v=2",
   appleWebApp: {
