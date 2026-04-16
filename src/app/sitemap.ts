@@ -1,3 +1,5 @@
+export const revalidate = 86400; // 24시간
+
 import { MetadataRoute } from "next";
 import { fetchAllPostsForSitemap } from "@/lib/notion/fetchAllPostsForSitemap";
 import { fetchPostsByCategory } from "@/lib/notion/fetchPostsByCategory";
