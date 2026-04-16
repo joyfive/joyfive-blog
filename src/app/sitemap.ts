@@ -1,3 +1,5 @@
+export const revalidate = 86400; // 24시간
+
 import { MetadataRoute } from "next";
 import { fetchAllPostsForSitemap } from "@/lib/notion/fetchAllPostsForSitemap";
 import { fetchPostsByCategory } from "@/lib/notion/fetchPostsByCategory";
@@ -9,7 +11,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: BASE_URL, lastModified: new Date(), changeFrequency: "weekly", priority: 1 },
     { url: `${BASE_URL}/blog`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
     { url: `${BASE_URL}/projects`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
-    { url: `${BASE_URL}/resume`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.5 },
   ];
 
   try {
