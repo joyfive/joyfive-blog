@@ -2,8 +2,8 @@ export const revalidate = 300;
 
 import { fetchPostByPath } from "@/lib/notion/fetchPostByPath";
 import { fetchPostsByCategory } from "@/lib/notion/fetchPostsByCategory";
-import { fetchPostMeta } from "@/lib/notion/fetchPostMeta";
 import { getTitle, getMultiSelect, getDate, getRichText } from "@/lib/utils/post";
+import { extractOgDescription, getOgImage } from "@/lib/utils/og";
 import { notFound } from "next/navigation";
 import { NotionDetailRenderer } from "@/components/notion/NotionDetailRenderer";
 import PostDetailHeader from "@/components/blog/PostDetailHeader";
@@ -18,17 +18,21 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { category, path } = params;
-  const meta = await fetchPostMeta("blog", category, path);
-  if (!meta) return {};
+  const post = await fetchPostByPath("blog", category, path);
+  if (!post) return {};
 
-  const description = meta.tags.length > 0 ? meta.tags.join(", ") : "오늘의 기쁨 블로그";
+  const title = getTitle(post.properties.title);
+  const description = extractOgDescription(post.recordMap) || "오늘의 기쁨 블로그";
+  const ogImage = getOgImage(post.recordMap);
+
   return {
-    title: `${meta.title} | 오늘의 기쁨`,
+    title: `${title} | 오늘의 기쁨`,
     description,
     openGraph: {
-      title: meta.title,
+      title,
       description,
       url: `https://joyfive-blog.vercel.app/blog/${category}/${path}`,
+      images: [{ url: ogImage, width: 1200, height: 630 }],
     },
   };
 }

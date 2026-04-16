@@ -1,4 +1,5 @@
 // src/lib/notion/fetchPostByPath.ts
+import { cache } from "react"
 import { notion } from "./client"
 import { NotionAPI } from "notion-client"
 import { NotionRawResponse } from "@/types/blog"
@@ -8,7 +9,7 @@ const notionClient = new NotionAPI({
   authToken: process.env.NOTION_TOKEN,
 })
 
-export async function fetchPostByPath(page: string, category: string, path: string) {
+export const fetchPostByPath = cache(async function fetchPostByPath(page: string, category: string, path: string) {
   try {
     // 1. 카테고리와 패스가 동시에 일치하는 데이터 쿼리
     const response = await notion.databases.query({
@@ -45,4 +46,4 @@ export async function fetchPostByPath(page: string, category: string, path: stri
     console.error("fetchPostByPath error:", error)
     return null
   }
-}
+})
