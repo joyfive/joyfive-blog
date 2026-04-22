@@ -60,7 +60,7 @@ export default async function BookWidget() {
               {item.img && (
                 <div className="relative w-28 h-40 shrink-0">
                   <Image
-                    src={item.img}
+                    src={`/api/notion-image?id=${encodeURIComponent(item.id)}`}
                     alt={backText || item.title}
                     fill
                     className="object-cover"

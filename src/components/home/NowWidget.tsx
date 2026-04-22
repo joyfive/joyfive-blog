@@ -52,7 +52,7 @@ export default async function NowWidget() {
             {item.img && (
               <div className="relative w-28 h-28 shrink-0">
                 <Image
-                  src={item.img}
+                  src={`/api/notion-image?id=${encodeURIComponent(item.id)}`}
                   alt={item.content[0] || item.title}
                   fill
                   className="object-cover"
