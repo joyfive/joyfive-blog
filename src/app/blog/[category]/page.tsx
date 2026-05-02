@@ -3,6 +3,7 @@ import { fetchCategories } from "@/lib/notion/fetchCategories";
 import CategoryNav from "@/components/blog/CategoryNav";
 import BlogPostItem from "@/components/blog/BlogPostItem";
 import PageHeader from "@/components/layout/PageHeader";
+import { OG_FALLBACK_IMAGE } from "@/lib/utils/og";
 import type { Metadata } from "next";
 
 interface Props {
@@ -17,6 +18,11 @@ export function generateMetadata({ params }: Props): Metadata {
     openGraph: {
       title: `${category} | Blog | 오늘의 기쁨`,
       url: `https://joyfive-blog.vercel.app/blog/${category}`,
+      images: [{ url: OG_FALLBACK_IMAGE, width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      images: [OG_FALLBACK_IMAGE],
     },
   };
 }

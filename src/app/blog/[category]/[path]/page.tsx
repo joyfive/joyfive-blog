@@ -34,6 +34,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url: `https://joyfive-blog.vercel.app/blog/${category}/${path}`,
       images: [{ url: ogImage, width: 1200, height: 630 }],
     },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImage],
+    },
   };
 }
 
