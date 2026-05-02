@@ -65,6 +65,8 @@ export function extractFirstImageUrl(recordMap: any): string | null {
   );
   if (!pageBlock?.value?.content) return null;
 
+  const signedUrls = recordMap.signed_urls as Record<string, string> | undefined;
+
   function traverse(blockIds: string[]): string | null {
     for (const blockId of blockIds) {
       const blockData = recordMap.block[blockId];
@@ -72,7 +74,10 @@ export function extractFirstImageUrl(recordMap: any): string | null {
       const block = blockData.value;
 
       if (block.type === "image") {
-        const url = block.properties?.source?.[0]?.[0];
+        // signed_urls 우선 — notion-client가 authToken으로 발급한 서명 URL (1시간 유효)
+        // source[0][0]은 서명 없는 S3 URL이라 크롤러 접근 시 403 반환
+        const url =
+          signedUrls?.[blockId] ?? block.properties?.source?.[0]?.[0];
         if (url) return url;
       }
 
