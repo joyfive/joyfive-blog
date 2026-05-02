@@ -24,6 +24,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `${title} | 오늘의 기쁨`,
     description,
     openGraph: {
+      type: "article",
+      siteName: "오늘의 기쁨",
       title,
       description,
       url: `https://joyfive-blog.vercel.app/projects/${params.path}`,
