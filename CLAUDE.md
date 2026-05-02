@@ -74,10 +74,16 @@ Notion DB
   └─ src/lib/utils/
        ├─ post.ts     # Property extractors: getTitle, getRichText, getSelect, etc.
        │               # filterUniquePosts: removes duplicate path entries from results
-       └─ toc.ts      # extractHeadings(recordMap): parses header/sub_header/sub_sub_header blocks
-                       # in document order → HeadingItem[] for TableOfContents
+       ├─ toc.ts      # extractHeadings(recordMap): parses header/sub_header/sub_sub_header blocks
+       │               # in document order → HeadingItem[] for TableOfContents
+       └─ og.ts       # extractOgDescription(recordMap): 첫 텍스트 블록 → OG description (max 100자)
+                       # extractFirstImageUrl(recordMap): 첫 image 블록 URL 반환 (없으면 null)
+                       # getOgImage(recordMap): 첫 이미지 URL 또는 OG_FALLBACK_IMAGE 반환
 
   └─ src/app/                  # Next.js pages (all Server Components except where noted)
+       ├─ api/notion-image/route.ts         # GET /api/notion-image?id={pageId}
+       │                                    # Notion 페이지의 img 프로퍼티 이미지를 프록시 (5분 캐싱)
+       │                                    # profile-cms book/now 위젯 이미지에 사용
        ├─ blog/[category]/[path]/page.tsx   # Post detail (PostDetailHeader + TOC + RelatedPosts)
        ├─ projects/page.tsx                 # Gallery view (needImage: true)
        ├─ resume|profile/page.tsx           # Single Notion pages
@@ -129,12 +135,16 @@ Posts with a non-unique `category+path` combination are silently excluded from l
 
 ### SEO & PWA
 
-- `src/app/sitemap.ts` → `/sitemap.xml` 자동 생성 (정적 페이지 + 블로그 전체 + 프로젝트 전체)
-- `src/app/robots.ts` → `/robots.txt` 생성
+- `src/app/sitemap.ts` → `/sitemap.xml` 자동 생성 (정적 페이지 + 블로그 전체 + 프로젝트 전체), 24시간 ISR
+- `src/app/robots.ts` → `/robots.txt` 생성 (`/admin`, `/resume` 크롤링 차단)
 - `public/manifest.json` → PWA 매니페스트 (standalone, icon-192/512)
 - `src/app/icon.svg`, `src/app/apple-icon.png` → Next.js App Router 파비콘 컨벤션
-- `public/og-image.png` → OG/Twitter 카드 공통 썸네일 (1200×630px)
-- `generateMetadata` — 각 페이지(blog 글, blog 카테고리, project 글)에서 title/description/OG 개별 설정
+- `public/og-image.png` → OG/Twitter 카드 기본 썸네일 (1200×630px)
+- `generateMetadata` — 각 페이지별 title/description/openGraph/twitter 개별 설정
+  - `/blog/[category]/[path]`, `/projects/[path]`: 본문 첫 이미지(`getOgImage`)를 OG·twitter 이미지로 사용, 없으면 `og-image.png` fallback
+  - 그 외 페이지: `og-image.png` 공통 사용
+- `metadataBase: new URL("https://joyfive-blog.vercel.app")` — root layout에 설정, 상대 URL 안정적 해석
+- `verification` — Google Search Console + Naver Search Advisor 인증 태그 (root layout `metadata.verification`)
 - `src/app/admin/layout.tsx` — `/admin` 하위 페이지는 PWA 비활성화 (manifest: null, appleWebApp.capable: false)
 
 ### ISR 캐싱 전략
@@ -145,6 +155,7 @@ Posts with a non-unique `category+path` combination are silently excluded from l
 | `/blog`, `/projects` | force-dynamic | 매 요청마다 최신 목록 fetch |
 | `/blog/[category]` | Dynamic (ƒ) | 요청마다 실시간 렌더링 |
 | `/blog/[category]/[path]`, `/projects/[path]` | 300초 (5분) | Notion 수정 후 최대 5분 내 반영 |
+| `/sitemap.xml` | 86400초 (24시간) | 신규 포스트 반영 주기 |
 
 ### 로딩 UI
 

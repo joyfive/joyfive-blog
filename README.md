@@ -173,7 +173,7 @@
 - CMS: Notion API (공식 `@notionhq/client` + 비공식 `notion-client`)
 - Rendering: react-notion-x
 - Package Manager: pnpm
-- Analytics: Google Tag Manager (`NEXT_PUBLIC_GTM_ID`)
+- Analytics: Google Tag Manager (`NEXT_PUBLIC_GTM_ID`) + GA4 (GTM 컨테이너 내 태그 연동)
 
 ### 10. 향후 확장 포인트 (명시적 비범위)
 
@@ -184,9 +184,14 @@
 
 ### 11. 완료된 인프라 항목
 
-- SEO: `generateMetadata` (글·카테고리별), `sitemap.xml`, `robots.txt`
-- OG 이미지: `public/og-image.png` (1200×630) — 링크 공유 시 카카오/SNS 미리보기 썸네일
+- SEO: `generateMetadata` (글·카테고리별 title/description/OG/twitter), `sitemap.xml` (24시간 ISR), `robots.txt`
+- 검색엔진 인증: Google Search Console + Naver Search Advisor 인증 태그 (root layout `metadata.verification`)
+- OG 이미지:
+  - 상세 페이지 (`/blog/[category]/[path]`, `/projects/[path]`): 본문 첫 번째 이미지 자동 추출, 없으면 `og-image.png` fallback
+  - 그 외 페이지: `public/og-image.png` (1200×630) 공통 사용
+  - `openGraph` + `twitter` 카드 모두 설정
 - PWA: `manifest.json`, 파비콘 (`icon.svg`, `apple-icon.png`), `/admin` PWA 비활성화
-- ISR 캐싱: 홈·상세 300초, `/blog`·`/projects` force-dynamic
+- ISR 캐싱: 홈·상세 300초, `/blog`·`/projects` force-dynamic, sitemap 24시간
 - 로딩 UI: 모든 라우트 세그먼트에 `loading.tsx` 적용 — 글자별 순차 등장 애니메이션
 - 잔디 기록 어드민: `/admin/jandi` — 타입 탭 기록, 오늘 완료 상태 즉시 반영
+- 애널리틱스: Google Tag Manager 삽입 (`@next/third-parties/google`) + GA4 연동 (GTM 컨테이너 내 태그)
