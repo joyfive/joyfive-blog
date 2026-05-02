@@ -92,10 +92,9 @@
 
 #### 4.6 Project 상세 (/projects/[path])
 
-- page=project + path 일치하는 Notion row 1건
+- page=projects + path 일치하는 Notion row 1건
 - 렌더링: react-notion-x 사용
 - OG 이미지: 본문 첫 번째 이미지 자동 추출, 없으면 사이트 공통 OG 이미지 사용
-- (코드상 목록용 page 값은 "projects", 상세용은 "project" 사용)
 
 #### 4.7 잔디 기록 어드민 (/admin/jandi)
 
@@ -138,7 +137,7 @@
 
 | 프로퍼티       | 타입     | 정책                                                              |
 | -------------- | -------- | ----------------------------------------------------------------- |
-| page           | Select   | 블로그·프로젝트 구분 (blog, projects / 상세는 project)            |
+| page           | Select   | 블로그·프로젝트 구분 (blog, projects)                             |
 | title          | Title    | 콘텐츠 제목                                                       |
 | category       | Select   | 블로그용 단일 선택·필수. 프로젝트는 사용 방식만 상이              |
 | path           | Text URL | 블로그·프로젝트 상세 식별자                                       |
