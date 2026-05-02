@@ -10,6 +10,7 @@ import localFont from 'next/font/local'
 import { GoogleTagManager } from "@next/third-parties/google"
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://joyfive-blog.vercel.app"),
   title: "오늘의 기쁨",
   description: "구조를 사랑하는 기획자, 가끔은 개발도 하고 글도 씁니다.",
   verification: {
