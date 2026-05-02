@@ -37,7 +37,10 @@ export const fetchPostByPath = cache(async function fetchPostByPath(page: string
     const notionPage = response.results[0] as unknown as NotionRawResponse
 
     // 2. 해당 페이지의 블록 데이터 가져오기
-    const raw = await notionClient.getPage(notionPage.id)
+    // chunkLimit을 크게 설정해 loadPageChunk 한 번에 모든 블록을 가져옴.
+    // 기본값(100)이면 초과 블록을 syncRecordValuesMain으로 재조회하는데,
+    // 해당 API가 일부 블록에 null을 반환해 콘텐츠가 잘리는 문제 방지.
+    const raw = await notionClient.getPage(notionPage.id, { chunkLimit: 1000 })
     const recordMap = sanitizeRecordMap(raw)
 
     return {

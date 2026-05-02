@@ -23,7 +23,7 @@ export async function fetchPostByPage(page: string) {
     const notionPage = response.results[0] as unknown as NotionRawResponse
 
     // 2. 해당 페이지의 블록 데이터 가져오기
-    const raw = await notionClient.getPage(notionPage.id)
+    const raw = await notionClient.getPage(notionPage.id, { chunkLimit: 1000 })
     const recordMap = sanitizeRecordMap(raw)
 
     return {
