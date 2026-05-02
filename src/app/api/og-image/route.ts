@@ -1,12 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
-import { NotionAPI } from "notion-client";
 import { notion } from "@/lib/notion/client";
-import { sanitizeRecordMap } from "@/lib/notion/sanitizeRecordMap";
-import { extractFirstImageUrl, OG_FALLBACK_IMAGE } from "@/lib/utils/og";
-
-const notionClient = new NotionAPI({ authToken: process.env.NOTION_TOKEN });
+import { OG_FALLBACK_IMAGE } from "@/lib/utils/og";
 
 const fallback = () => NextResponse.redirect(OG_FALLBACK_IMAGE, { status: 302 });
+
+async function findFirstImageUrl(blockId: string, depth = 2): Promise<string | null> {
+  const response = await notion.blocks.children.list({
+    block_id: blockId,
+    page_size: 20,
+  });
+
+  for (const block of response.results) {
+    const b = block as any;
+    if (b.type === "image") {
+      // 공식 API는 업로드 이미지에 fresh signed URL, 외부 이미지는 external.url 반환
+      return b.image?.file?.url ?? b.image?.external?.url ?? null;
+    }
+    if (b.has_children && depth > 0) {
+      const nested = await findFirstImageUrl(b.id, depth - 1);
+      if (nested) return nested;
+    }
+  }
+  return null;
+}
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
@@ -30,16 +46,12 @@ export async function GET(request: NextRequest) {
     });
 
     if (response.results.length !== 1) return fallback();
-
     const pageId = (response.results[0] as any).id;
 
-    // 신선한 signed URL을 매번 Notion에서 발급받아 이미지 바이트로 서빙
-    const raw = await notionClient.getPage(pageId);
-    const recordMap = sanitizeRecordMap(raw);
-    const imageUrl = extractFirstImageUrl(recordMap);
-
+    const imageUrl = await findFirstImageUrl(pageId);
     if (!imageUrl) return fallback();
 
+    // 이미지 바이트로 서빙 — signed URL 만료와 무관하게 캐시 기간 동안 안정적으로 서빙
     const imageRes = await fetch(imageUrl, { cache: "no-store" });
     if (!imageRes.ok) return fallback();
 
@@ -47,7 +59,6 @@ export async function GET(request: NextRequest) {
     return new NextResponse(data, {
       headers: {
         "Content-Type": imageRes.headers.get("content-type") ?? "image/jpeg",
-        // 이미지 바이트를 캐싱 — signed URL 만료와 무관하게 안정적으로 서빙
         "Cache-Control": "public, max-age=3600, stale-while-revalidate=600",
       },
     });
