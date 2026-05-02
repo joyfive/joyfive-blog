@@ -13,7 +13,7 @@ interface Props {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const post = await fetchPostByPath("project", "", params.path);
+  const post = await fetchPostByPath("projects", "", params.path);
   if (!post) return {};
 
   const title = getTitle(post.properties.title);
