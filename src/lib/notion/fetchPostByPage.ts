@@ -1,4 +1,4 @@
-// src/lib/notion/fetchPostByPath.ts
+// src/lib/notion/fetchPostByPage.ts
 import { notion } from "./client"
 import { NotionAPI } from "notion-client"
 import { NotionRawResponse } from "@/types/blog"
@@ -8,9 +8,30 @@ const notionClient = new NotionAPI({
   authToken: process.env.NOTION_TOKEN,
 })
 
+async function fetchAllBlocksViaCursor(pageId: string): Promise<Record<string, any>> {
+  const allBlocks: Record<string, any> = {}
+  let cursor: any = { stack: [] }
+
+  do {
+    const response: any = await (notionClient as any).fetch({
+      endpoint: "loadPageChunk",
+      body: {
+        pageId,
+        limit: 100,
+        cursor,
+        chunkNumber: 0,
+        verticalColumns: false,
+      },
+    })
+    Object.assign(allBlocks, response?.recordMap?.block ?? {})
+    cursor = response?.cursor ?? { stack: [] }
+  } while (cursor?.stack?.length > 0)
+
+  return allBlocks
+}
+
 export async function fetchPostByPage(page: string) {
   try {
-    // 1. 카테고리와 패스가 동시에 일치하는 데이터 쿼리
     const response = await notion.databases.query({
       database_id: process.env.NOTION_DATABASE_ID!,
       filter: {
@@ -22,8 +43,12 @@ export async function fetchPostByPage(page: string) {
 
     const notionPage = response.results[0] as unknown as NotionRawResponse
 
-    // 2. 해당 페이지의 블록 데이터 가져오기
-    const raw = await notionClient.getPage(notionPage.id, { chunkLimit: 1000 })
+    const [allBlocks, raw] = await Promise.all([
+      fetchAllBlocksViaCursor(notionPage.id),
+      notionClient.getPage(notionPage.id, { fetchMissingBlocks: false }),
+    ])
+    raw.block = { ...raw.block, ...allBlocks }
+
     const recordMap = sanitizeRecordMap(raw)
 
     return {
