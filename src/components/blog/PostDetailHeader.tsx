@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import { annotate } from "rough-notation";
 
 interface PostDetailHeaderProps {
@@ -34,6 +34,64 @@ function RoughTagBox({ tag }: { tag: string }) {
   );
 }
 
+function ShareButton() {
+  const [copied, setCopied] = useState(false);
+
+  const handleShare = useCallback(async () => {
+    const url = window.location.href;
+    if (navigator.share) {
+      await navigator.share({ url });
+    } else {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    }
+  }, []);
+
+  return (
+    <button
+      onClick={handleShare}
+      aria-label="공유"
+      className="relative group flex items-center justify-center text-stone-400 hover:text-stone-600 transition-colors"
+    >
+      {copied ? (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+      ) : (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M12 2v13" />
+          <path d="m16 6-4-4-4 4" />
+          <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
+        </svg>
+      )}
+      <span className="absolute -bottom-5 right-0 text-[10px] text-stone-400 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+        {copied ? "복사됨" : "공유"}
+      </span>
+    </button>
+  );
+}
+
 export default function PostDetailHeader({
   category,
   publishedAt,
@@ -42,22 +100,25 @@ export default function PostDetailHeader({
 }: PostDetailHeaderProps) {
   return (
     <header className="mb-10">
-      {/* Category badge + Date */}
-      <div className="flex items-center gap-3 mb-5">
-        <Link href={`/blog/${category}`}>
-          <span className="relative inline-flex items-center px-2 py-0.5 text-xs font-medium text-stone-600">
-            <span
-              className="absolute inset-0 bg-stone-700/10 border border-stone-700/20 filter-rough pointer-events-none"
-              aria-hidden="true"
-            />
-            <span className="relative">{category}</span>
-          </span>
-        </Link>
-        {publishedAt && (
-          <time className="text-xs text-stone-400">
-            {new Date(publishedAt).toLocaleDateString("ko-KR")}
-          </time>
-        )}
+      {/* Category badge + Date + Share */}
+      <div className="flex items-center justify-between mb-5">
+        <div className="flex items-center gap-3">
+          <Link href={`/blog/${category}`}>
+            <span className="relative inline-flex items-center px-2 py-0.5 text-xs font-medium text-stone-600">
+              <span
+                className="absolute inset-0 bg-stone-700/10 border border-stone-700/20 filter-rough pointer-events-none"
+                aria-hidden="true"
+              />
+              <span className="relative">{category}</span>
+            </span>
+          </Link>
+          {publishedAt && (
+            <time className="text-xs text-stone-400">
+              {new Date(publishedAt).toLocaleDateString("ko-KR")}
+            </time>
+          )}
+        </div>
+        <ShareButton />
       </div>
 
       {/* Title */}
