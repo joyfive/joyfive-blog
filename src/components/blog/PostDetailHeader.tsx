@@ -53,7 +53,7 @@ function ShareButton() {
       <button
         onClick={handleShare}
         aria-label="공유"
-        className="flex items-center justify-center text-stone-400 hover:text-stone-600 transition-colors"
+        className="flex items-center justify-center p-1.5 rounded-sm text-stone-400 hover:text-stone-600 hover:bg-stone-50 transition-colors"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
