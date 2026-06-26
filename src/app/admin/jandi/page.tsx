@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { fetchJandiTypes, fetchTodayJandiTypes } from "@/lib/notion/fetchJandiData";
 import JandiLogger from "./JandiLogger";
+import FloatingNav from "../FloatingNav";
 import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
@@ -35,11 +37,16 @@ export default async function JandiAdminPage({ searchParams }: Props) {
   });
 
   return (
-    <JandiLogger
-      types={types}
-      logKey={key}
-      todayLabel={todayLabel}
-      initialCompleted={completedToday}
-    />
+    <>
+      <JandiLogger
+        types={types}
+        logKey={key}
+        todayLabel={todayLabel}
+        initialCompleted={completedToday}
+      />
+      <Suspense fallback={null}>
+        <FloatingNav />
+      </Suspense>
+    </>
   );
 }
