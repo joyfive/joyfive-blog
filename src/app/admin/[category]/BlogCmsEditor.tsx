@@ -106,10 +106,12 @@ function ItemCard({
   const [data, setData] = useState<ItemData>(toFormData(item));
   const [imgState, setImgState] = useState<{ url?: string; clear?: boolean }>({});
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
+  const [saveError, setSaveError] = useState("");
   const [, startTransition] = useTransition();
 
   const handleSave = () => {
     setStatus("saving");
+    setSaveError("");
     startTransition(async () => {
       const result = await updateProfileItem(item.id, logKey, {
         ...data,
@@ -121,8 +123,9 @@ function ItemCard({
         setStatus("saved");
         setTimeout(() => setStatus("idle"), 1500);
       } else {
+        setSaveError(result.error ?? "저장 실패");
         setStatus("error");
-        setTimeout(() => setStatus("idle"), 2500);
+        setTimeout(() => setStatus("idle"), 4000);
       }
     });
   };
@@ -168,6 +171,10 @@ function ItemCard({
             onChange={(url) => setImgState({ url, clear: false })}
             onClear={() => setImgState({ url: undefined, clear: true })}
           />
+        )}
+
+        {saveError && (
+          <p className="text-xs text-red-500 break-all">{saveError}</p>
         )}
 
         <div className="flex justify-end">

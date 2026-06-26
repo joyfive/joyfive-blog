@@ -29,7 +29,17 @@ export async function updateProfileItem(
     const imgProp = data.clearImg
       ? { img: { files: [] } }
       : data.imgUrl
-      ? { img: { files: [{ type: "external", external: { url: data.imgUrl } }] } }
+      ? {
+          img: {
+            files: [
+              {
+                name: "cover",
+                type: "external",
+                external: { url: data.imgUrl },
+              },
+            ],
+          },
+        }
       : {};
 
     await notion.pages.update({
