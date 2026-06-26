@@ -54,7 +54,9 @@ function ItemForm({
           {f.multiline ? (
             <textarea
               value={(data as any)[f.key]}
-              onChange={(e) => onChange({ ...data, [f.key]: e.target.value })}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                onChange({ ...data, [f.key]: e.target.value })
+              }
               placeholder={f.placeholder}
               rows={3}
               className="resize-y border border-stone-200 px-3 py-2 text-sm text-stone-700 focus:outline-none focus:border-stone-400 font-orbit"
@@ -63,7 +65,9 @@ function ItemForm({
             <input
               type={f.key.includes("date") ? "date" : "text"}
               value={(data as any)[f.key]}
-              onChange={(e) => onChange({ ...data, [f.key]: e.target.value })}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                onChange({ ...data, [f.key]: e.target.value })
+              }
               placeholder={f.placeholder}
               className="border border-stone-200 px-3 py-2 text-sm text-stone-700 focus:outline-none focus:border-stone-400 font-orbit"
             />
@@ -96,14 +100,13 @@ function NewItemPanel({
     startTransition(async () => {
       const result = await createProfileItem(category, logKey, data);
       if (result.ok && result.id) {
-        const newItem: ProfileItem = {
+        onCreated({
           id: result.id,
           img: "",
           ...data,
           content: data.content.split("\n").filter(Boolean),
           description: data.description.split("\n").filter(Boolean),
-        };
-        onCreated(newItem);
+        });
         setData(EMPTY);
         setOpen(false);
         setStatus("idle");

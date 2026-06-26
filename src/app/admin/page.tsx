@@ -4,7 +4,7 @@ interface Props {
   searchParams: { key?: string };
 }
 
-export default function BlogAdminRoot({ searchParams }: Props) {
+export default function AdminRoot({ searchParams }: Props) {
   const key = searchParams.key ?? "";
-  redirect(`/admin/blog/intro?key=${key}`);
+  redirect(`/admin/jandi?key=${key}`);
 }

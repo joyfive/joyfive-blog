@@ -55,7 +55,7 @@ export default function JandiLogger({
   };
 
   return (
-    <div className="max-w-sm mx-auto px-4 py-10 flex flex-col gap-8">
+    <div className="max-w-sm mx-auto px-4 py-10 pb-28 flex flex-col gap-8">
       {/* 헤더 */}
       <div className="text-center">
         <h1 className="font-orbit text-2xl font-bold text-stone-800 mb-1">

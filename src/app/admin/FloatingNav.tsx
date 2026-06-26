@@ -8,6 +8,7 @@ const TABS = [
   { key: "skills", label: "스킬" },
   { key: "book", label: "독서" },
   { key: "now", label: "지금" },
+  { key: "jandi", label: "잔디" },
 ] as const;
 
 export default function FloatingNav() {
@@ -18,14 +19,13 @@ export default function FloatingNav() {
   return (
     <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
       <div className="relative flex items-center gap-1 bg-white px-2 py-2 shadow-lg">
-        {/* rough border on nav container */}
         <span
           className="absolute inset-0 filter-rough border border-stone-300 pointer-events-none"
           aria-hidden="true"
         />
         {TABS.map((tab) => {
-          const href = `/admin/blog/${tab.key}?key=${logKey}`;
-          const isActive = pathname.includes(`/admin/blog/${tab.key}`);
+          const href = `/admin/${tab.key}?key=${logKey}`;
+          const isActive = pathname === `/admin/${tab.key}`;
           return (
             <Link
               key={tab.key}

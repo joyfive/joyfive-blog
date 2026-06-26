@@ -21,7 +21,7 @@ interface Props {
   searchParams: { key?: string };
 }
 
-export default async function BlogCmsPage({ params, searchParams }: Props) {
+export default async function CategoryAdminPage({ params, searchParams }: Props) {
   const { key } = searchParams;
 
   if (!key || !process.env.LOG_KEY || key !== process.env.LOG_KEY) {
