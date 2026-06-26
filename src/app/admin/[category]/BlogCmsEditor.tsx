@@ -149,24 +149,38 @@ function ItemCard({
     <div className="relative p-4 bg-white">
       <span className="absolute inset-0 filter-rough border border-stone-200 pointer-events-none" />
       <div className="relative flex flex-col gap-3">
-        {config.fields.map((f) => (
-          <label key={f.key} className="flex flex-col gap-1">
-            <span className="text-xs font-semibold text-stone-500 uppercase tracking-wide">
-              {f.label}
-            </span>
-            <textarea
-              value={(data as any)[f.key]}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                setData((d) => ({ ...d, [f.key]: e.target.value }))
-              }
-              placeholder={f.placeholder}
-              rows={f.multiline ? 4 : 1}
-              className="resize-y border border-stone-200 px-3 py-2 text-sm text-stone-700 focus:outline-none focus:border-stone-400 font-orbit"
-            />
-          </label>
-        ))}
+        {config.fields.map((f) => {
+          const isDate = f.key === "start_date" || f.key === "end_date";
+          return (
+            <label key={f.key} className="flex flex-col gap-1">
+              <span className="text-xs font-semibold text-stone-500 uppercase tracking-wide">
+                {f.label}
+              </span>
+              {isDate ? (
+                <input
+                  type="date"
+                  value={(data as any)[f.key]}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setData((d) => ({ ...d, [f.key]: e.target.value }))
+                  }
+                  className="border border-stone-200 px-3 py-2 text-sm text-stone-700 focus:outline-none focus:border-stone-400 font-orbit"
+                />
+              ) : (
+                <textarea
+                  value={(data as any)[f.key]}
+                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                    setData((d) => ({ ...d, [f.key]: e.target.value }))
+                  }
+                  placeholder={f.placeholder}
+                  rows={f.multiline ? 4 : 1}
+                  className="resize-y border border-stone-200 px-3 py-2 text-sm text-stone-700 focus:outline-none focus:border-stone-400 font-orbit"
+                />
+              )}
+            </label>
+          );
+        })}
 
-        {category === "book" && (
+        {config.hasImage && (
           <ImageUpload
             currentImgUrl={item.img}
             logKey={logKey}
