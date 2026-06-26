@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useRef } from "react";
 import {
   createProfileItem,
   updateProfileItem,
@@ -34,6 +34,112 @@ function toFormData(item: ProfileItem): ItemData {
     end_date: item.end_date ? item.end_date.replace(/\./g, "-") : "",
   };
 }
+
+// ── 이미지 업로드 컴포넌트 ──────────────────────────────────────
+
+interface ImageUploadProps {
+  currentImgUrl: string;
+  logKey: string;
+  onUploaded: (fileId: string) => void;
+  onClear: () => void;
+}
+
+function ImageUpload({ currentImgUrl, logKey, onUploaded, onClear }: ImageUploadProps) {
+  const [preview, setPreview] = useState<string>(currentImgUrl);
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleFile = async (file: File) => {
+    setUploading(true);
+    setError("");
+    const localUrl = URL.createObjectURL(file);
+    setPreview(localUrl);
+
+    const fd = new FormData();
+    fd.append("file", file);
+
+    const res = await fetch(`/api/admin/upload?key=${logKey}`, {
+      method: "POST",
+      body: fd,
+    });
+    setUploading(false);
+
+    if (!res.ok) {
+      setError("업로드 실패");
+      setPreview(currentImgUrl);
+      return;
+    }
+    const { fileId } = await res.json();
+    onUploaded(fileId);
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) handleFile(file);
+  };
+
+  const handleClear = () => {
+    setPreview("");
+    onClear();
+    if (inputRef.current) inputRef.current.value = "";
+  };
+
+  return (
+    <div className="flex flex-col gap-2">
+      <span className="text-xs font-semibold text-stone-500 uppercase tracking-wide">
+        표지 이미지
+      </span>
+      {preview ? (
+        <div className="flex items-start gap-3">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={preview}
+            alt="cover"
+            className="w-16 h-20 object-cover border border-stone-200"
+          />
+          <div className="flex flex-col gap-2 pt-1">
+            <button
+              type="button"
+              onClick={() => inputRef.current?.click()}
+              disabled={uploading}
+              className="px-3 py-1 text-xs border border-stone-300 text-stone-600 hover:border-stone-500 disabled:opacity-40"
+            >
+              {uploading ? "업로드 중..." : "변경"}
+            </button>
+            <button
+              type="button"
+              onClick={handleClear}
+              className="px-3 py-1 text-xs border border-stone-200 text-stone-400 hover:text-red-500 hover:border-red-300"
+            >
+              삭제
+            </button>
+          </div>
+        </div>
+      ) : (
+        <button
+          type="button"
+          onClick={() => inputRef.current?.click()}
+          disabled={uploading}
+          className="relative w-full py-4 text-xs text-stone-400 hover:text-stone-600 disabled:opacity-40"
+        >
+          <span className="absolute inset-0 filter-rough border border-dashed border-stone-300 pointer-events-none" />
+          <span className="relative">{uploading ? "업로드 중..." : "+ 이미지 추가"}</span>
+        </button>
+      )}
+      {error && <p className="text-xs text-red-500">{error}</p>}
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={handleChange}
+      />
+    </div>
+  );
+}
+
+// ── 텍스트 필드 폼 ────────────────────────────────────────────
 
 function ItemForm({
   config,
@@ -77,6 +183,8 @@ function ItemForm({
     </div>
   );
 }
+
+// ── 새 항목 추가 패널 ─────────────────────────────────────────
 
 function NewItemPanel({
   category,
@@ -135,6 +243,14 @@ function NewItemPanel({
       <div className="relative flex flex-col gap-4">
         <p className="text-xs font-semibold text-stone-400 uppercase tracking-wide">새 항목</p>
         <ItemForm config={config} data={data} onChange={setData} />
+        {category === "book" && (
+          <ImageUpload
+            currentImgUrl=""
+            logKey={logKey}
+            onUploaded={(fileId) => setData((d) => ({ ...d, imgFileId: fileId, clearImg: false }))}
+            onClear={() => setData((d) => ({ ...d, imgFileId: undefined, clearImg: true }))}
+          />
+        )}
         <div className="flex gap-2 justify-end">
           <button
             onClick={() => { setOpen(false); setData(EMPTY); setStatus("idle"); }}
@@ -158,14 +274,18 @@ function NewItemPanel({
   );
 }
 
+// ── 개별 아이템 카드 ──────────────────────────────────────────
+
 function ItemCard({
   item,
+  category,
   config,
   logKey,
   onUpdated,
   onDeleted,
 }: {
   item: ProfileItem;
+  category: string;
   config: CategoryConfig;
   logKey: string;
   onUpdated: (item: ProfileItem) => void;
@@ -173,27 +293,42 @@ function ItemCard({
 }) {
   const [editing, setEditing] = useState(false);
   const [data, setData] = useState<ItemData>(toFormData(item));
+  const [imgState, setImgState] = useState<{ fileId?: string; clear?: boolean }>({});
   const [status, setStatus] = useState<"idle" | "saving" | "deleting" | "error">("idle");
   const [, startTransition] = useTransition();
 
   const handleSave = () => {
     setStatus("saving");
+    const saveData: ItemData = {
+      ...data,
+      imgFileId: imgState.fileId,
+      clearImg: imgState.clear,
+    };
     startTransition(async () => {
-      const result = await updateProfileItem(item.id, logKey, data);
+      const result = await updateProfileItem(item.id, logKey, saveData);
       if (result.ok) {
         onUpdated({
           ...item,
           ...data,
+          img: imgState.clear ? "" : imgState.fileId ? item.img : item.img,
           content: data.content.split("\n").filter(Boolean),
           description: data.description.split("\n").filter(Boolean),
         });
         setEditing(false);
+        setImgState({});
         setStatus("idle");
       } else {
         setStatus("error");
         setTimeout(() => setStatus("idle"), 2500);
       }
     });
+  };
+
+  const handleCancel = () => {
+    setEditing(false);
+    setData(toFormData(item));
+    setImgState({});
+    setStatus("idle");
   };
 
   const handleDelete = () => {
@@ -217,11 +352,16 @@ function ItemCard({
         {editing ? (
           <>
             <ItemForm config={config} data={data} onChange={setData} />
+            {category === "book" && (
+              <ImageUpload
+                currentImgUrl={item.img}
+                logKey={logKey}
+                onUploaded={(fileId) => setImgState({ fileId, clear: false })}
+                onClear={() => setImgState({ fileId: undefined, clear: true })}
+              />
+            )}
             <div className="flex gap-2 justify-end">
-              <button
-                onClick={() => { setEditing(false); setData(toFormData(item)); setStatus("idle"); }}
-                className="px-3 py-1.5 text-xs text-stone-400 hover:text-stone-600"
-              >
+              <button onClick={handleCancel} className="px-3 py-1.5 text-xs text-stone-400 hover:text-stone-600">
                 취소
               </button>
               <button
@@ -239,7 +379,22 @@ function ItemCard({
         ) : (
           <>
             <div className="flex items-start justify-between gap-2">
-              <p className="font-semibold text-stone-800 text-sm leading-snug">{item.title}</p>
+              <div className="flex items-start gap-3 min-w-0">
+                {category === "book" && item.img && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={item.img}
+                    alt={item.title}
+                    className="w-10 h-14 object-cover border border-stone-200 shrink-0"
+                  />
+                )}
+                <div className="min-w-0">
+                  <p className="font-semibold text-stone-800 text-sm leading-snug">{item.title}</p>
+                  {item.description.length > 0 && (
+                    <p className="text-xs text-stone-500 mt-0.5">{item.description.join(" · ")}</p>
+                  )}
+                </div>
+              </div>
               <div className="flex gap-1 shrink-0">
                 <button
                   onClick={() => setEditing(true)}
@@ -256,9 +411,6 @@ function ItemCard({
                 </button>
               </div>
             </div>
-            {item.description.length > 0 && (
-              <p className="text-xs text-stone-500">{item.description.join(" · ")}</p>
-            )}
             {item.content.length > 0 && (
               <p className="text-xs text-stone-400 line-clamp-2">{item.content.join(" ")}</p>
             )}
@@ -273,6 +425,8 @@ function ItemCard({
     </div>
   );
 }
+
+// ── 메인 ─────────────────────────────────────────────────────
 
 export default function BlogCmsEditor({ category, config, logKey, initialItems }: Props) {
   const [items, setItems] = useState<ProfileItem[]>(initialItems);
@@ -296,6 +450,7 @@ export default function BlogCmsEditor({ category, config, logKey, initialItems }
           <ItemCard
             key={item.id}
             item={item}
+            category={category}
             config={config}
             logKey={logKey}
             onUpdated={handleUpdated}

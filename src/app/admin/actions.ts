@@ -14,6 +14,8 @@ export interface ItemData {
   description: string;
   start_date: string;
   end_date: string;
+  imgFileId?: string;   // Notion file ID (업로드 후)
+  clearImg?: boolean;   // true면 img 프로퍼티 초기화
 }
 
 export async function createProfileItem(
@@ -52,6 +54,12 @@ export async function updateProfileItem(
 ): Promise<{ ok: boolean; error?: string }> {
   try {
     authorize(logKey);
+    const imgProp = data.clearImg
+      ? { img: { files: [] } }
+      : data.imgFileId
+      ? { img: { files: [{ type: "file", file: { id: data.imgFileId } }] } }
+      : {};
+
     await notion.pages.update({
       page_id: pageId,
       properties: {
@@ -64,7 +72,8 @@ export async function updateProfileItem(
         end_date: data.end_date
           ? { date: { start: data.end_date } }
           : { date: null },
-      },
+        ...imgProp,
+      } as any,
     });
     return { ok: true };
   } catch (e) {
