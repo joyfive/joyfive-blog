@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition, useRef } from "react";
+import { useState, useTransition } from "react";
 import { updateProfileItem, type ItemData } from "../actions";
 import type { ProfileItem } from "@/lib/notion/fetchProfileCms";
 import type { CategoryConfig } from "../categoryConfig";
@@ -22,54 +22,37 @@ function toFormData(item: ProfileItem): ItemData {
   };
 }
 
-// ── 이미지 업로드 ─────────────────────────────────────────────
+// ── 이미지 URL 입력 ───────────────────────────────────────────
 
-function ImageUpload({
+function ImageInput({
   currentImgUrl,
-  logKey,
-  onUploaded,
+  onChange,
   onClear,
 }: {
   currentImgUrl: string;
-  logKey: string;
-  onUploaded: (fileId: string) => void;
+  onChange: (url: string) => void;
   onClear: () => void;
 }) {
+  const [inputUrl, setInputUrl] = useState("");
   const [preview, setPreview] = useState(currentImgUrl);
-  const [uploading, setUploading] = useState(false);
-  const [error, setError] = useState("");
-  const addRef = useRef<HTMLInputElement>(null);
 
-  const handleFile = async (file: File) => {
-    setUploading(true);
-    setError("");
-    const localUrl = URL.createObjectURL(file);
-
-    const fd = new FormData();
-    fd.append("file", file);
-    const res = await fetch(`/api/admin/upload?key=${logKey}`, { method: "POST", body: fd });
-    setUploading(false);
-
-    if (!res.ok) {
-      const json = await res.json().catch(() => ({}));
-      setError(json.error ?? "업로드 실패");
-      return;
-    }
-    const { fileId } = await res.json();
-    setPreview(localUrl);
-    onUploaded(fileId);
+  const handleAdd = () => {
+    const url = inputUrl.trim();
+    if (!url) return;
+    setPreview(url);
+    onChange(url);
+    setInputUrl("");
   };
 
   const handleClear = () => {
     setPreview("");
-    setError("");
+    setInputUrl("");
     onClear();
-    if (addRef.current) addRef.current.value = "";
   };
 
   return (
     <div className="flex flex-col gap-2">
-      <span className="text-xs font-semibold text-stone-500 uppercase tracking-wide">표지 이미지</span>
+      <span className="text-xs font-semibold text-stone-500 uppercase tracking-wide">이미지</span>
 
       {preview && (
         // eslint-disable-next-line @next/next/no-img-element
@@ -77,33 +60,32 @@ function ImageUpload({
       )}
 
       <div className="flex gap-2">
+        <input
+          type="url"
+          value={inputUrl}
+          onChange={(e) => setInputUrl(e.target.value)}
+          onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handleAdd(); } }}
+          placeholder="이미지 URL 붙여넣기"
+          className="flex-1 border border-stone-200 px-3 py-1.5 text-xs text-stone-700 focus:outline-none focus:border-stone-400 font-orbit"
+        />
         <button
           type="button"
-          onClick={() => addRef.current?.click()}
-          disabled={uploading}
-          className="px-3 py-1.5 text-xs border border-stone-300 text-stone-600 hover:border-stone-600 disabled:opacity-40"
+          onClick={handleAdd}
+          disabled={!inputUrl.trim()}
+          className="px-3 py-1.5 text-xs border border-stone-300 text-stone-600 hover:border-stone-600 disabled:opacity-40 shrink-0"
         >
-          {uploading ? "업로드 중..." : "+ 추가"}
+          추가
         </button>
         {preview && (
           <button
             type="button"
             onClick={handleClear}
-            className="px-3 py-1.5 text-xs border border-stone-200 text-stone-400 hover:text-red-500 hover:border-red-300"
+            className="px-3 py-1.5 text-xs border border-stone-200 text-stone-400 hover:text-red-500 hover:border-red-300 shrink-0"
           >
             삭제
           </button>
         )}
       </div>
-
-      {error && <p className="text-xs text-red-500 break-all">{error}</p>}
-      <input
-        ref={addRef}
-        type="file"
-        accept="image/*"
-        className="hidden"
-        onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); }}
-      />
     </div>
   );
 }
@@ -122,7 +104,7 @@ function ItemCard({
   logKey: string;
 }) {
   const [data, setData] = useState<ItemData>(toFormData(item));
-  const [imgState, setImgState] = useState<{ fileId?: string; clear?: boolean }>({});
+  const [imgState, setImgState] = useState<{ url?: string; clear?: boolean }>({});
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [, startTransition] = useTransition();
 
@@ -131,7 +113,7 @@ function ItemCard({
     startTransition(async () => {
       const result = await updateProfileItem(item.id, logKey, {
         ...data,
-        imgFileId: imgState.fileId,
+        imgUrl: imgState.url,
         clearImg: imgState.clear,
       });
       if (result.ok) {
@@ -181,11 +163,10 @@ function ItemCard({
         })}
 
         {config.hasImage && (
-          <ImageUpload
+          <ImageInput
             currentImgUrl={item.img}
-            logKey={logKey}
-            onUploaded={(fileId) => setImgState({ fileId, clear: false })}
-            onClear={() => setImgState({ fileId: undefined, clear: true })}
+            onChange={(url) => setImgState({ url, clear: false })}
+            onClear={() => setImgState({ url: undefined, clear: true })}
           />
         )}
 

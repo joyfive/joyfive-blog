@@ -14,7 +14,7 @@ export interface ItemData {
   description: string;
   start_date: string;
   end_date: string;
-  imgFileId?: string;
+  imgUrl?: string;    // 외부 이미지 URL
   clearImg?: boolean;
 }
 
@@ -28,8 +28,8 @@ export async function updateProfileItem(
 
     const imgProp = data.clearImg
       ? { img: { files: [] } }
-      : data.imgFileId
-      ? { img: { files: [{ type: "file", file: { id: data.imgFileId } }] } }
+      : data.imgUrl
+      ? { img: { files: [{ type: "external", external: { url: data.imgUrl } }] } }
       : {};
 
     await notion.pages.update({
