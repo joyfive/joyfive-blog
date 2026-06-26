@@ -30,14 +30,19 @@ export async function POST(req: NextRequest) {
   });
 
   if (!initRes.ok) {
-    const err = await initRes.text();
-    console.error("[upload init]", err);
-    return NextResponse.json({ error: "Init failed" }, { status: 500 });
+    const errBody = await initRes.text();
+    console.error("[upload init]", initRes.status, errBody);
+    return NextResponse.json(
+      { error: `Notion init (${initRes.status}): ${errBody}` },
+      { status: 500 }
+    );
   }
 
-  const { id: fileId, upload_url: uploadUrl } = await initRes.json();
+  const initJson = await initRes.json();
+  const fileId: string = initJson.id;
+  const uploadUrl: string = initJson.upload_url;
 
-  // 2단계: 파일 바이너리 업로드
+  // 2단계: 파일 바이너리 업로드 (S3 presigned URL — Notion 헤더 제외)
   const arrayBuffer = await file.arrayBuffer();
   const putRes = await fetch(uploadUrl, {
     method: "PUT",
@@ -46,9 +51,12 @@ export async function POST(req: NextRequest) {
   });
 
   if (!putRes.ok) {
-    const err = await putRes.text();
-    console.error("[upload put]", err);
-    return NextResponse.json({ error: "Upload failed" }, { status: 500 });
+    const errBody = await putRes.text();
+    console.error("[upload put]", putRes.status, errBody);
+    return NextResponse.json(
+      { error: `S3 upload (${putRes.status}): ${errBody}` },
+      { status: 500 }
+    );
   }
 
   // 3단계: 업로드 완료
@@ -58,9 +66,12 @@ export async function POST(req: NextRequest) {
   );
 
   if (!completeRes.ok) {
-    const err = await completeRes.text();
-    console.error("[upload complete]", err);
-    return NextResponse.json({ error: "Complete failed" }, { status: 500 });
+    const errBody = await completeRes.text();
+    console.error("[upload complete]", completeRes.status, errBody);
+    return NextResponse.json(
+      { error: `Notion complete (${completeRes.status}): ${errBody}` },
+      { status: 500 }
+    );
   }
 
   return NextResponse.json({ fileId });

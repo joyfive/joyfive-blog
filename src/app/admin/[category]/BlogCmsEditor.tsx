@@ -38,12 +38,12 @@ function ImageUpload({
   const [preview, setPreview] = useState(currentImgUrl);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
-  const inputRef = useRef<HTMLInputElement>(null);
+  const addRef = useRef<HTMLInputElement>(null);
 
   const handleFile = async (file: File) => {
     setUploading(true);
     setError("");
-    setPreview(URL.createObjectURL(file));
+    const localUrl = URL.createObjectURL(file);
 
     const fd = new FormData();
     fd.append("file", file);
@@ -51,48 +51,59 @@ function ImageUpload({
     setUploading(false);
 
     if (!res.ok) {
-      setError("업로드 실패");
-      setPreview(currentImgUrl);
+      const json = await res.json().catch(() => ({}));
+      setError(json.error ?? "업로드 실패");
       return;
     }
     const { fileId } = await res.json();
+    setPreview(localUrl);
     onUploaded(fileId);
   };
 
   const handleClear = () => {
     setPreview("");
+    setError("");
     onClear();
-    if (inputRef.current) inputRef.current.value = "";
+    if (addRef.current) addRef.current.value = "";
   };
 
   return (
     <div className="flex flex-col gap-2">
       <span className="text-xs font-semibold text-stone-500 uppercase tracking-wide">표지 이미지</span>
-      {preview ? (
-        <div className="flex items-start gap-3">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={preview} alt="cover" className="w-16 h-20 object-cover border border-stone-200" />
-          <div className="flex flex-col gap-2 pt-1">
-            <button type="button" onClick={() => inputRef.current?.click()} disabled={uploading}
-              className="px-3 py-1 text-xs border border-stone-300 text-stone-600 hover:border-stone-500 disabled:opacity-40">
-              {uploading ? "업로드 중..." : "변경"}
-            </button>
-            <button type="button" onClick={handleClear}
-              className="px-3 py-1 text-xs border border-stone-200 text-stone-400 hover:text-red-500 hover:border-red-300">
-              삭제
-            </button>
-          </div>
-        </div>
-      ) : (
-        <button type="button" onClick={() => inputRef.current?.click()} disabled={uploading}
-          className="relative w-full py-4 text-xs text-stone-400 hover:text-stone-600 disabled:opacity-40">
-          <span className="absolute inset-0 filter-rough border border-dashed border-stone-300 pointer-events-none" />
-          <span className="relative">{uploading ? "업로드 중..." : "+ 이미지 추가"}</span>
-        </button>
+
+      {preview && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={preview} alt="cover" className="w-16 h-20 object-cover border border-stone-200" />
       )}
-      {error && <p className="text-xs text-red-500">{error}</p>}
-      <input ref={inputRef} type="file" accept="image/*" className="hidden"
-        onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); }} />
+
+      <div className="flex gap-2">
+        <button
+          type="button"
+          onClick={() => addRef.current?.click()}
+          disabled={uploading}
+          className="px-3 py-1.5 text-xs border border-stone-300 text-stone-600 hover:border-stone-600 disabled:opacity-40"
+        >
+          {uploading ? "업로드 중..." : "+ 추가"}
+        </button>
+        {preview && (
+          <button
+            type="button"
+            onClick={handleClear}
+            className="px-3 py-1.5 text-xs border border-stone-200 text-stone-400 hover:text-red-500 hover:border-red-300"
+          >
+            삭제
+          </button>
+        )}
+      </div>
+
+      {error && <p className="text-xs text-red-500 break-all">{error}</p>}
+      <input
+        ref={addRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); }}
+      />
     </div>
   );
 }
