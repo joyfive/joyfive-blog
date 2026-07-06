@@ -57,14 +57,12 @@ Each record has these properties:
 Notion DB
   └─ src/lib/notion/          # Fetch layer (server-only)
        ├─ fetchCategories.ts        # Reads category options from DB schema
-       ├─ fetchRecentPosts.ts       # Latest N blog posts
        ├─ fetchPostsByCategory.ts   # Posts by page+category, optionally with cover images/excerpts
        │                             # categoryName이 빈 문자열이면 category 필터 생략 (전체 조회)
        ├─ fetchPostByPath.ts        # Single post: queries by page+category+path, then fetches blocks
        │                             # Returns { id, recordMap, properties }
        ├─ fetchPostMeta.ts          # generateMetadata 전용 경량 쿼리 (블록 fetch 없이 title/tags만)
        ├─ fetchAllPostsForSitemap.ts # sitemap.ts 전용 — page 전체 포스트 목록 (블록 없음)
-       ├─ fetchPostByPage.ts        # Single page (resume, profile) by page name
        ├─ fetchProfileCms.ts        # Home widgets: intro/skills/book/now (NOTION_PROFILE_DB_ID)
        └─ fetchJandiData.ts         # Activity tracker (NOTION_JANDI_DB_ID)
                                     # fetchJandiTypes: DB select 옵션 목록
@@ -84,9 +82,10 @@ Notion DB
        ├─ api/notion-image/route.ts         # GET /api/notion-image?id={pageId}
        │                                    # Notion 페이지의 img 프로퍼티 이미지를 프록시 (5분 캐싱)
        │                                    # profile-cms book/now 위젯 이미지에 사용
+       ├─ blog/page.tsx                     # All posts, paginated 10/page (?page=N)
        ├─ blog/[category]/[path]/page.tsx   # Post detail (PostDetailHeader + TOC + RelatedPosts)
        ├─ projects/page.tsx                 # Gallery view (needImage: true)
-       ├─ resume|profile/page.tsx           # Single Notion pages
+       ├─ profile/page.tsx                  # Single Notion page
        └─ admin/jandi/                      # 잔디 기록 어드민 (숨김 페이지)
             ├─ page.tsx                     # 서버 컴포넌트 — LOG_KEY 인증, types+오늘완료 fetch
             ├─ JandiLogger.tsx             # "use client" — 타입별 기록 버튼, 완료 상태 관리
@@ -98,6 +97,7 @@ Notion DB
        │                                    #   /blog, /blog/[category], /projects 에서 공유
        ├─ blog/
        │   ├─ PostDetailHeader.tsx          # "use client" — category tape + date + title + rough tags
+       │   ├─ Pagination.tsx                # Prev/next + page numbers, active page uses rough box
        │   ├─ TableOfContents.tsx           # "use client" — DesktopTOC (sticky sidebar) +
        │   │                                #   MobileTOC (floating button + bottom sheet)
        │   │                                #   IntersectionObserver for active heading tracking
@@ -111,12 +111,12 @@ Notion DB
 
 ### Routing
 
-- `/blog` — Recent posts + category list
+- `/blog` — All posts (paginated, 10/page via `?page=N`) + category list
 - `/blog/[category]` — Posts filtered by category
 - `/blog/[category]/[path]` — Post detail (rendered via react-notion-x)
 - `/projects` — Gallery grid with cover images and excerpts
 - `/projects/[path]` — Project detail
-- `/profile`, `/resume` — Single Notion pages
+- `/profile` — Single Notion page
 - `/admin/jandi?key=LOG_KEY` — 잔디 기록 전용 숨김 페이지 (robots: noindex, key 불일치 시 notFound)
 
 ### Rendering Notion Content
@@ -136,7 +136,7 @@ Posts with a non-unique `category+path` combination are silently excluded from l
 ### SEO & PWA
 
 - `src/app/sitemap.ts` → `/sitemap.xml` 자동 생성 (정적 페이지 + 블로그 전체 + 프로젝트 전체), 24시간 ISR
-- `src/app/robots.ts` → `/robots.txt` 생성 (`/admin`, `/resume` 크롤링 차단)
+- `src/app/robots.ts` → `/robots.txt` 생성
 - `public/manifest.json` → PWA 매니페스트 (standalone, icon-192/512)
 - `src/app/icon.svg`, `src/app/apple-icon.png` → Next.js App Router 파비콘 컨벤션
 - `public/og-image.png` → OG/Twitter 카드 기본 썸네일 (1200×630px)
@@ -194,7 +194,6 @@ The `RoughFilter` component injects an SVG `<filter id="rough-border">` used via
 
 - 작업 단위별로 완료 시 자동으로 커밋한다.
 - 푸시는 사용자가 명시적으로 요청할 때만 실행한다.
-- **resume 페이지 (`/resume`, `fetchPostByPage.ts` 등)는 README.md에 절대 기재하지 않는다.** 이 페이지는 선택적으로 특정 대상에게만 공유하는 용도이므로 공개 문서에서 노출하지 않는다.
 
 ## Design System Rules (작업 전 반드시 숙지)
 

@@ -1,16 +1,30 @@
 export const dynamic = "force-dynamic";
 
-import { fetchRecentPosts } from "@/lib/notion/fetchRecentPosts";
+import { fetchPostsByCategory } from "@/lib/notion/fetchPostsByCategory";
 import { fetchCategories } from "@/lib/notion/fetchCategories";
 import CategoryNav from "@/components/blog/CategoryNav";
 import BlogPostItem from "@/components/blog/BlogPostItem";
 import PageHeader from "@/components/layout/PageHeader";
+import Pagination from "@/components/blog/Pagination";
 
-export default async function BlogPage() {
-  const [recentPosts, categories] = await Promise.all([
-    fetchRecentPosts(5),
+const POSTS_PER_PAGE = 10;
+
+interface Props {
+  searchParams: { page?: string };
+}
+
+export default async function BlogPage({ searchParams }: Props) {
+  const [allPosts, categories] = await Promise.all([
+    fetchPostsByCategory("blog", "", false),
     fetchCategories(),
   ]);
+
+  const totalPages = Math.max(1, Math.ceil(allPosts.length / POSTS_PER_PAGE));
+  const currentPage = Math.min(Math.max(1, Number(searchParams.page) || 1), totalPages);
+  const posts = allPosts.slice(
+    (currentPage - 1) * POSTS_PER_PAGE,
+    currentPage * POSTS_PER_PAGE
+  );
 
   return (
     <main className="max-w-5xl mx-auto py-12 px-4">
@@ -26,12 +40,15 @@ export default async function BlogPage() {
 
         <section className="flex-1">
           <h2 className="text-sm font-bold text-stone-400 uppercase tracking-widest mb-8">
-            Recent Posts
+            All Posts
           </h2>
-          {recentPosts.length > 0 ? (
-            recentPosts.map((post) => (
-              <BlogPostItem key={post.id} post={post} />
-            ))
+          {posts.length > 0 ? (
+            <>
+              {posts.map((post) => (
+                <BlogPostItem key={post.id} post={post} />
+              ))}
+              <Pagination basePath="/blog" currentPage={currentPage} totalPages={totalPages} />
+            </>
           ) : (
             <p className="text-stone-400 py-12">곧 채워질 예정입니다.</p>
           )}
