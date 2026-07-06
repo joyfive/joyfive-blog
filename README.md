@@ -205,7 +205,7 @@
 #### 검색 최적화
 
 - `sitemap.xml`: 정적 페이지 + 블로그 전체 + 프로젝트 전체 자동 생성, 24시간 ISR 갱신
-- `robots.txt`: `/admin`, `/resume` 크롤링 차단
+- `robots.txt` 제공
 - Google Search Console + Naver Search Advisor 인증 태그 적용
 
 #### 캐싱 전략 (ISR)
