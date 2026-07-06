@@ -57,7 +57,6 @@ Each record has these properties:
 Notion DB
   └─ src/lib/notion/          # Fetch layer (server-only)
        ├─ fetchCategories.ts        # Reads category options from DB schema
-       ├─ fetchRecentPosts.ts       # Latest N blog posts
        ├─ fetchPostsByCategory.ts   # Posts by page+category, optionally with cover images/excerpts
        │                             # categoryName이 빈 문자열이면 category 필터 생략 (전체 조회)
        ├─ fetchPostByPath.ts        # Single post: queries by page+category+path, then fetches blocks
@@ -83,6 +82,7 @@ Notion DB
        ├─ api/notion-image/route.ts         # GET /api/notion-image?id={pageId}
        │                                    # Notion 페이지의 img 프로퍼티 이미지를 프록시 (5분 캐싱)
        │                                    # profile-cms book/now 위젯 이미지에 사용
+       ├─ blog/page.tsx                     # All posts, paginated 10/page (?page=N)
        ├─ blog/[category]/[path]/page.tsx   # Post detail (PostDetailHeader + TOC + RelatedPosts)
        ├─ projects/page.tsx                 # Gallery view (needImage: true)
        ├─ profile/page.tsx                  # Single Notion page
@@ -97,6 +97,7 @@ Notion DB
        │                                    #   /blog, /blog/[category], /projects 에서 공유
        ├─ blog/
        │   ├─ PostDetailHeader.tsx          # "use client" — category tape + date + title + rough tags
+       │   ├─ Pagination.tsx                # Prev/next + page numbers, active page uses rough box
        │   ├─ TableOfContents.tsx           # "use client" — DesktopTOC (sticky sidebar) +
        │   │                                #   MobileTOC (floating button + bottom sheet)
        │   │                                #   IntersectionObserver for active heading tracking
@@ -110,7 +111,7 @@ Notion DB
 
 ### Routing
 
-- `/blog` — Recent posts + category list
+- `/blog` — All posts (paginated, 10/page via `?page=N`) + category list
 - `/blog/[category]` — Posts filtered by category
 - `/blog/[category]/[path]` — Post detail (rendered via react-notion-x)
 - `/projects` — Gallery grid with cover images and excerpts
