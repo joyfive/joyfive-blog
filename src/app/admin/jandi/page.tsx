@@ -28,12 +28,8 @@ export default async function JandiAdminPage({ searchParams }: Props) {
   ]);
   if (types.length === 0) return notFound();
 
-  const todayLabel = new Date().toLocaleDateString("ko-KR", {
+  const todayKST = new Date().toLocaleDateString("en-CA", {
     timeZone: "Asia/Seoul",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    weekday: "short",
   });
 
   return (
@@ -41,7 +37,7 @@ export default async function JandiAdminPage({ searchParams }: Props) {
       <JandiLogger
         types={types}
         logKey={key}
-        todayLabel={todayLabel}
+        todayKST={todayKST}
         initialCompleted={completedToday}
       />
       <Suspense fallback={null}>
