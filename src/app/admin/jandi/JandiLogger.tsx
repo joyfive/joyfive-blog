@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState, useTransition } from "react";
-import { createJandiRecord, fetchCompletedByDate } from "./actions";
+import {
+  createJandiRecord,
+  deleteJandiRecord,
+  fetchCompletedByDate,
+} from "./actions";
 import type { JandiType } from "@/lib/notion/fetchJandiData";
 
 type TransientState = "loading" | "error";
@@ -79,37 +83,40 @@ export default function JandiLogger({
   };
   const goToday = () => setSelectedDate(todayKST);
 
-  const handleTap = (typeName: string) => {
-    if (
-      dateLoading ||
-      completed.has(typeName) ||
-      transient[typeName] === "loading"
-    )
-      return;
+  const clearTransient = (typeName: string) =>
+    setTransient((t) => {
+      const next = { ...t };
+      delete next[typeName];
+      return next;
+    });
 
+  const handleTap = (typeName: string) => {
+    if (dateLoading || transient[typeName] === "loading") return;
+
+    const isDone = completed.has(typeName);
     setTransient((t) => ({ ...t, [typeName]: "loading" }));
 
-    const dateForRecord = selectedDate;
+    const dateForAction = selectedDate;
     startTransition(async () => {
-      const result = await createJandiRecord(typeName, logKey, dateForRecord);
+      // 완료 상태면 토글 삭제, 아니면 기록 추가
+      const result = isDone
+        ? await deleteJandiRecord(typeName, logKey, dateForAction)
+        : await createJandiRecord(typeName, logKey, dateForAction);
+
       // 응답 도착 사이 날짜가 바뀌었으면 UI 반영하지 않음
-      if (dateForRecord !== selectedDate) return;
+      if (dateForAction !== selectedDate) return;
+
       if (result.ok) {
-        setCompleted((c) => new Set(Array.from(c).concat(typeName)));
-        setTransient((t) => {
-          const next = { ...t };
-          delete next[typeName];
+        setCompleted((c) => {
+          const next = new Set(c);
+          if (isDone) next.delete(typeName);
+          else next.add(typeName);
           return next;
         });
+        clearTransient(typeName);
       } else {
         setTransient((t) => ({ ...t, [typeName]: "error" }));
-        setTimeout(() => {
-          setTransient((t) => {
-            const next = { ...t };
-            delete next[typeName];
-            return next;
-          });
-        }, 2500);
+        setTimeout(() => clearTransient(typeName), 2500);
       }
     });
   };
@@ -173,13 +180,14 @@ export default function JandiLogger({
             <button
               key={type.id}
               onClick={() => handleTap(type.name)}
-              disabled={isDone || isLoading || dateLoading}
+              disabled={isLoading || dateLoading}
+              title={isDone ? "다시 눌러 기록 취소" : undefined}
               className={`
                 relative flex flex-col items-center justify-center
                 min-h-[100px] px-4 py-5 rounded-none
                 text-base font-semibold transition-all
-                ${!isDone && !isError ? "active:scale-95" : ""}
-                ${isDone ? "bg-stone-800 text-white cursor-default" : "bg-white text-stone-700"}
+                ${!isError ? "active:scale-95" : ""}
+                ${isDone ? "bg-stone-800 text-white" : "bg-white text-stone-700"}
                 ${isError ? "bg-red-50 text-red-500" : ""}
                 ${isLoading ? "opacity-60" : ""}
               `}
@@ -202,21 +210,19 @@ export default function JandiLogger({
 
               <span className="relative text-lg">{type.name}</span>
 
-              {isDone && (
-                <span className="relative text-xs mt-1 font-normal opacity-70">
-                  완료 ✓
-                </span>
-              )}
-              {isLoading && (
+              {isLoading ? (
                 <span className="relative text-xs mt-1 font-normal opacity-60">
-                  기록 중...
+                  {isDone ? "취소 중..." : "기록 중..."}
                 </span>
-              )}
-              {isError && (
+              ) : isError ? (
                 <span className="relative text-xs mt-1 font-normal">
                   실패했어요
                 </span>
-              )}
+              ) : isDone ? (
+                <span className="relative text-xs mt-1 font-normal opacity-70">
+                  완료 ✓
+                </span>
+              ) : null}
             </button>
           );
         })}

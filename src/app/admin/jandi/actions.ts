@@ -43,6 +43,44 @@ export async function createJandiRecord(
   }
 }
 
+export async function deleteJandiRecord(
+  typeName: string,
+  logKey: string,
+  dateStr?: string
+): Promise<{ ok: boolean; error?: string }> {
+  if (!logKey || !process.env.LOG_KEY || logKey !== process.env.LOG_KEY) {
+    return { ok: false, error: "Unauthorized" };
+  }
+
+  const date = dateStr ?? todayKST();
+  if (!isValidDate(date) || date > todayKST()) {
+    return { ok: false, error: "Invalid date" };
+  }
+
+  try {
+    const response = await notion.databases.query({
+      database_id: process.env.NOTION_JANDI_DB_ID!,
+      filter: {
+        and: [
+          { property: "created_at", date: { equals: date } },
+          { property: "type", select: { equals: typeName } },
+        ],
+      },
+    });
+
+    // 같은 날짜·타입으로 중복 기록됐을 수 있으므로 모두 아카이브
+    await Promise.all(
+      response.results.map((page: any) =>
+        notion.pages.update({ page_id: page.id, archived: true })
+      )
+    );
+    return { ok: true };
+  } catch (e) {
+    console.error("[deleteJandiRecord]", e);
+    return { ok: false, error: String(e) };
+  }
+}
+
 export async function fetchCompletedByDate(
   dateStr: string,
   logKey: string
