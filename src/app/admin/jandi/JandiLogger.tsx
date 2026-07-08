@@ -82,6 +82,11 @@ export default function JandiLogger({
     if (canGoNext) setSelectedDate((d) => shiftDate(d, 1));
   };
   const goToday = () => setSelectedDate(todayKST);
+  const handleDateInput = (value: string) => {
+    // 미래 날짜는 오늘로 클램프, 빈 값은 무시
+    if (!value) return;
+    setSelectedDate(value > todayKST ? todayKST : value);
+  };
 
   const clearTransient = (typeName: string) =>
     setTransient((t) => {
@@ -129,31 +134,40 @@ export default function JandiLogger({
           잔디 기록
         </h1>
 
-        {/* 날짜 네비게이션 */}
-        <div className="flex items-center justify-center gap-3">
+        {/* 날짜 네비게이션 (좌우 화살표 + 직접 입력) */}
+        <div className="flex items-center justify-center gap-2">
           <button
             onClick={goPrev}
             aria-label="이전 날짜"
-            className="w-8 h-8 flex items-center justify-center text-stone-500 hover:text-stone-800 active:scale-90 transition-all"
+            className="w-8 h-8 flex items-center justify-center text-lg text-stone-500 hover:text-stone-800 active:scale-90 transition-all"
           >
             ‹
           </button>
-          <p className="text-sm text-stone-500 min-w-[10rem] tabular-nums">
-            {formatLabel(selectedDate)}
-          </p>
+          <input
+            type="date"
+            value={selectedDate}
+            max={todayKST}
+            onChange={(e) => handleDateInput(e.target.value)}
+            aria-label="날짜 선택"
+            className="text-sm text-stone-600 bg-transparent border-b border-stone-200 focus:border-stone-500 outline-none px-1 py-0.5 tabular-nums"
+          />
           <button
             onClick={goNext}
             disabled={!canGoNext}
             aria-label="다음 날짜"
-            className={`w-8 h-8 flex items-center justify-center transition-all ${
+            className={`w-8 h-8 flex items-center justify-center text-lg transition-all ${
               canGoNext
                 ? "text-stone-500 hover:text-stone-800 active:scale-90"
-                : "text-stone-200 cursor-default"
+                : "opacity-20 cursor-default"
             }`}
           >
             ›
           </button>
         </div>
+
+        <p className="mt-2 text-xs text-stone-400 tabular-nums">
+          {formatLabel(selectedDate)}
+        </p>
 
         {!isToday && (
           <button
