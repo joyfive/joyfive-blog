@@ -5,7 +5,14 @@ import { NotionAPI } from "notion-client"
 import { NotionRawResponse } from "@/types/blog"
 import { sanitizeRecordMap } from "./sanitizeRecordMap"
 
+// Notion이 비공식 API 호스트를 app.notion.com으로 이전하면서
+// 레거시 호스트(www.notion.so/api/v3)는 403 Forbidden을 반환한다.
+// notion-client 7.x의 기본값이 아직 레거시 호스트라 명시적으로 지정한다.
+const NOTION_API_BASE_URL =
+  process.env.NOTION_API_BASE_URL ?? "https://app.notion.com/api/v3"
+
 const notionClient = new NotionAPI({
+  apiBaseUrl: NOTION_API_BASE_URL,
   authToken: process.env.NOTION_TOKEN,
 })
 
