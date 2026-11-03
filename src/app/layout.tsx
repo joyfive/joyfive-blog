@@ -8,6 +8,7 @@ import RoughFilter from "@/components/layout/RoughFilter";
 import Loading from "./loading";
 import localFont from 'next/font/local'
 import { GoogleTagManager } from "@next/third-parties/google"
+import Script from "next/script"
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://joyfive-blog.vercel.app"),
@@ -60,7 +61,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" className={danjo.variable}>
-
+      <head>
+        <Script id="microsoft-clarity" strategy="afterInteractive">
+          {`
+            (function(c,l,a,r,i,t,y){
+                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+            })(window, document, "clarity", "script", "z3ndwd4y3j");
+          `}
+        </Script>
+      </head>
       <body className="min-h-screen flex flex-col">
         <RoughFilter />
         <Header className="sticky top-0 z-50 shrink-0 bg-white" />
